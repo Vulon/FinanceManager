@@ -33,61 +33,63 @@ public class AuthController {
     }
 
     @FXML
-    private void signINHandler(){
+    private void signINHandler() {
         signINButton.setDisable(true);
         String login = loginINfield.getText();
         String password = passINField.getText();
-        String response = HTTPMessenger.authLogin(login, password);
-        if(response.equals("OK")){
-
-        }else if(response.equals("Wrong URL")){
-            signINButton.setDisable(false);
-            errorMsg2.setVisible(true);
-            errorMsg2.setText("Network connection trouble");
-        }else if(response.equals("Connection timeout")){
-            signINButton.setDisable(false);
-            errorMsg2.setVisible(true);
-            errorMsg2.setText("Network connection trouble");
-        }else if(response.equals("NOTMATCH")){
-            signINButton.setDisable(false);
-            errorMsg2.setVisible(true);
-            errorMsg2.setText("Login does not match password");
-            passINField.setText("");
+        int response = HTTPMessenger.authLogin(login, password);
+        switch (response) {
+            case 200: {
+                sceneManager.activateScreen("main");
+                return;
+            }
+            case 404: {
+                signINButton.setDisable(false);
+                errorMsg2.setVisible(true);
+                errorMsg2.setText("Login does not match password");
+                passINField.setText("");
+                return;
+            }
+            case 500: {
+                signINButton.setDisable(false);
+                errorMsg2.setVisible(true);
+                errorMsg2.setText("Network connection trouble");
+                return;
+            }
         }
-        sceneManager.activateScreen("main"); //TODO change sign IN handler
+        //TODO change sign IN handler
     }
     @FXML
-    private void signUPHandler(){
+    private void signUPHandler() {
         String login = loginRegField.getText();
         String password1 = passRegField.getText();
         String password2 = pass2RegField.getText();
         signUPButton.setDisable(true);
-        if (password1.equals(password2)){
-            String response = HTTPMessenger.authRegister(login, password1);
-            if(response.equals("OK")){
-                errorMsg1.setVisible(true);
-                errorMsg1.setTextFill(Color.GREEN);
-                errorMsg1.setText("Registration complete");
-            }else if(response.equals("INUSE")){
-                signUPButton.setDisable(false);
-                errorMsg1.setVisible(true);
-                errorMsg1.setText("Username is already occupied");
-            }else if(response.equals("Wrong URL")){
-                signUPButton.setDisable(false);
-                errorMsg1.setVisible(true);
-                errorMsg1.setText("Network connection trouble");
-            }else if(response.equals("Connection timeout")){
-                signUPButton.setDisable(false);
-                errorMsg1.setVisible(true);
-                errorMsg1.setText("Network connection trouble");
+        if (password1.equals(password2)) {
+            int response = HTTPMessenger.authRegister(login, password1);
+            switch (response) {
+                case 200: {
+                    errorMsg1.setVisible(true);
+                    errorMsg1.setTextFill(Color.GREEN);
+                    errorMsg1.setText("Registration complete");
+                    return;
+                }
+                case 409: {
+                    signUPButton.setDisable(false);
+                    errorMsg1.setVisible(true);
+                    errorMsg1.setText("Username is already occupied");
+                }
+                case 500: {
+                    signUPButton.setDisable(false);
+                    errorMsg1.setVisible(true);
+                    errorMsg1.setText("Network connection trouble");
+                    return;
+                }
             }
-        }else{
+        } else {
             signUPButton.setDisable(false);
             errorMsg1.setVisible(true);
             errorMsg1.setText("Passwords do not match");
         }
     }
-
-
-
 }
