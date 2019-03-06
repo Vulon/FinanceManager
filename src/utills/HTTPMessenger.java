@@ -2,6 +2,7 @@ package utills;
 
 import dataStructure.Category;
 import dataStructure.Transaction;
+import javafx.collections.ObservableList;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -49,7 +50,7 @@ public class HTTPMessenger {
             return 500;
         }
     }
-    public static int loadData(ArrayList<Transaction> transactions, HashMap<Integer, Category> categories){
+    public static int loadData(ArrayList<Transaction> transactions, ObservableList<Category> categories){
         StringBuilder urlString= new StringBuilder(urlMainPath);
         try{
             URL url = new URL(urlString.toString());

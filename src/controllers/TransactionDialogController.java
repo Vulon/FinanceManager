@@ -2,6 +2,7 @@ package controllers;
 
 import dataStructure.Category;
 import dataStructure.Transaction;
+import dataStructure.categoryCell;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,9 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.FlowPane;
@@ -30,29 +33,27 @@ public class TransactionDialogController implements Initializable {
     @FXML private TextField dateField;
     @FXML private TextArea noteArea;
     @FXML
-    private FlowPane iconPane;
-    @FXML
     private Button applyButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private ListView<Category> categoryList;
+    private Category selectedCategory;
+    @FXML public void handleMouseClick(MouseEvent arg0) {
+        selectedCategory = categoryList.getSelectionModel().getSelectedItem();
+    }
     private ObservableList<Transaction> transactionObservableList;
-    public void setReturnReference(ObservableList<Transaction> transactionObservableList){
+    private ObservableList<Category> categories;
+    public void setReturnReference(ObservableList<Transaction> transactionObservableList, ObservableList<Category> categories){
         this.transactionObservableList = transactionObservableList;
+        this.categories = categories;
+        categoryList.setItems(categories);
+        categoryList.setCellFactory(categoryList -> new categoryCell());
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        int counter = 1;
-        int x = 0;
-        int y = 0;
-        int columns = 3;
-        for(int i = 1; i <= Category.MAXICONCOUNT; i++){
-            String imagePath = "/icons/" + Integer.toString(i) + ".png";
-            ImageView tempImageView = new ImageView(imagePath);
-            tempImageView.setId("imv" + Integer.toString(i));
-            tempImageView.setVisible(true);
-            iconPane.getChildren().add(tempImageView);
 
-        }
+        selectedCategory = null;
 
     }
     @FXML
@@ -84,7 +85,10 @@ public class TransactionDialogController implements Initializable {
         if(applyButton.isDisabled()){
             return;
         }else{
-            Transaction transaction = new Transaction(Integer.parseInt(amountField.getText()), 0,
+            if(selectedCategory == null){
+                selectedCategory = categories.get(0);
+            }
+            Transaction transaction = new Transaction(Integer.parseInt(amountField.getText()), selectedCategory,
                     parseDate(dateField.getText()),
                     noteArea.getText());
             transactionObservableList.add(transaction);
@@ -114,7 +118,6 @@ public class TransactionDialogController implements Initializable {
         int year = Integer.parseInt(String.copyValueOf(number, 6, 4));
         int hours = Integer.parseInt(String.copyValueOf(number, 11, 2));
         int mins = Integer.parseInt(String.copyValueOf(number, 14, 2));
-
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.set(year, mounth, day, hours, mins);
 

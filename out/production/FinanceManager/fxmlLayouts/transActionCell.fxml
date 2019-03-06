@@ -13,7 +13,7 @@
          <children>
             <ImageView fx:id="iconView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/food.png" />
+                  <Image url="@../icons/9.png" />
                </image>
                <HBox.margin>
                   <Insets right="5.0" />

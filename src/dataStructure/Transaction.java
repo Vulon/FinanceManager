@@ -5,14 +5,14 @@ import java.util.GregorianCalendar;
 
 public class Transaction {
     private int amount;
-    private int categoryId;
+    private Category category;
     private String note;
     private Date date;
     public static GregorianCalendar calendar;
 
-    public Transaction(int amount, int categoryId,  Date date, String note) {
+    public Transaction(int amount, Category category,  Date date, String note) {
         this.amount = amount;
-        this.categoryId = categoryId;
+        this.category = category;
         this.note = note;
         this.date = date;
         if(calendar == null){
@@ -20,9 +20,9 @@ public class Transaction {
         }
     }
 
-    public Transaction(int amount, int categoryId, Date date) {
+    public Transaction(int amount, Category category, Date date) {
         this.amount = amount;
-        this.categoryId = categoryId;
+        this.category = category;
         this.date = date;
         note = "";
         if(calendar == null){
@@ -38,12 +38,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getNote() {

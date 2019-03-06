@@ -1,12 +1,12 @@
-package controllers;
+package dataStructure;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import dataStructure.Transaction;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -34,7 +34,7 @@ public class TransActionCell extends ListCell<Transaction> {
             if (mLoader == null) {
             }
             mLoader = new FXMLLoader(getClass().getResource("../fxmlLayouts/transActionCell.fxml"));
-            //mLoader.setLocation();
+
             mLoader.setController(this);
             try {
                 mLoader.load();
@@ -43,19 +43,23 @@ public class TransActionCell extends ListCell<Transaction> {
             }
             amountLabel.setText(Integer.toString(item.getAmount()) + " р");
             item.calendar.setTime(item.getDate());
-            String date = Integer.toString(item.calendar.get(Calendar.DAY_OF_YEAR));
+            String date = Integer.toString(item.calendar.get(Calendar.DAY_OF_MONTH));
             date += "." + Integer.toString(item.calendar.get(Calendar.MONTH));
             date += "." + Integer.toString(item.calendar.get(Calendar.YEAR));
             date += " " + Integer.toString(item.calendar.get(Calendar.HOUR)) + ":";
             date += Integer.toString(item.calendar.get(Calendar.MINUTE));
             dateLabel.setText(date);
             noteLabel.setText(item.getNote());
+            iconView.setStyle("-fx-background-color: transparent");
+            String layoutColor = "-fx-background-color: #" + item.getCategory().getColor().toString().substring(2, 10);
+            cellLayout.setStyle(layoutColor);
             if (noteLabel.getText().equals("")){
                 noteLabel.setVisible(false);
             }else{
                 noteLabel.setVisible(true);
             }
-            //iconView.setImage(); //TODO FIX ICON ON CELL
+            String imagePath = "icons/" + Integer.toString(item.getCategory().getIconId()) + ".png";
+            iconView.setImage(new Image(imagePath));
 
             setText(null);
             setGraphic(cellLayout);

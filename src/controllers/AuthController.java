@@ -60,6 +60,10 @@ public class AuthController {
         //TODO change sign IN handler
     }
     @FXML
+    private void testHandler(){
+        sceneManager.activateScreen("main");
+    }
+    @FXML
     private void signUPHandler() {
         String login = loginRegField.getText();
         String password1 = passRegField.getText();

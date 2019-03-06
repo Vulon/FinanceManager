@@ -49,6 +49,7 @@
                               <Insets top="40.0" />
                            </VBox.margin>
                         </Label>
+                        <Button mnemonicParsing="false" onAction="#testHandler" text="TestButton" />
                      </children>
                   </VBox>
             </content>

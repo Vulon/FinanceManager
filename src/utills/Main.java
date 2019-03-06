@@ -11,6 +11,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -35,6 +36,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(530);
         primaryStage.setTitle("Finance manager");
         authController.setUpSceneManager(sceneManager);
+
         primaryStage.show();
     }
 
