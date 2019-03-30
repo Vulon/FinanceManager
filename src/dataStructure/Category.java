@@ -2,25 +2,36 @@ package dataStructure;
 
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Category {
-    public static final int MAXICONCOUNT = 12;
+    public static final int MAXICONCOUNT = 32;
     private String name;
-    private Color color;
+    private String color; //#ffffff
     private int iconId;
     private int ID;
+    private ArrayList<Integer> heirs;
+    private boolean isIncome;
 
-    public Category(int ID, String name, Color color, int iconId) {
+    public Category(int ID, String name, String color, int iconId, boolean isIncome, Integer ... indexes) {
         this.name = name;
         this.color = color;
         this.iconId = iconId;
         this.ID = ID;
+        this.isIncome = isIncome;
+        heirs = new ArrayList<Integer>();
+        for(Integer category : indexes){
+            heirs.add(category);
+        }
+
     }
+    public ArrayList<Integer> getHeirs(){ return heirs;}
 
     public String getName() {
         return name;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
@@ -31,4 +42,6 @@ public class Category {
     public int getID() {
         return ID;
     }
+
+    public boolean checkIsIncome(){return isIncome;}
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Categories>
+	<nes_incomes>
+		<nes_income id = Salary>
+			<image>1.png</image>
+			<color>#adebad</color>
+		</nes_income>
+		<nes_income id = Interest on deposits>
+			<image>2.png</image>
+			<color>#99ff33</color>
+		</nes_income>
+	</nes_incomes>
+	<nes_expenses>
+		<nes_expense id = Products>
+			<image>3.png</image>
+			<color>#ff3333</color>
+		</nes_expense>
+		<nes_expense id = Medical service>
+			<image>4.png</image>
+			<color>#6699ff</color>
+		</nes_expense>
+		<nes_expense id = Medicines>
+			<image>5.png</image>
+			<color>#b3ccff</color>
+		</nes_expense>
+		<nes_expense id = Clothes>
+			<image>6.png</image>
+			<color>#b300b3</color>
+		</nes_expense>
+		<nes_expense id = Entertainment>
+			<image>7.png</image>
+			<color>#ffff1a</color>
+		</nes_expense>
+		<nes_expense id = Household chemicals>
+			<image>8.png</image>
+			<color>#b33c00</color>
+		</nes_expense>
+		<nes_expense id = Utility costs>
+			<image>9.png</image>
+			<color>#ff9999</color>
+		</nes_expense>
+		<nes_expense id = Rent, loan>
+			<image>10.png</image>
+			<color>#ff66ff</color>
+		</nes_expense>
+		<nes_expense id = Internet>
+			<image>11.png</image>
+			<color>#9966ff</color>
+		</nes_expense>
+		<nes_expense id = Mobile services>
+			<image>12.png</image>
+			<color>#7733ff</color>
+		</nes_expense>
+		<nes_expense id = Travel>
+			<image>13.png</image>
+			<color>#ff9900</color>
+		</nes_expense>
+		<nes_expense id = Fastfood>
+			<image>14.png</image>
+			<color>#ff3333</color>
+		</nes_expense>
+		<nes_expense id = Taxes>
+			<image>15.png</image>
+			<color>#c1c1f0</color>
+		</nes_expense>
+		<nes_expense id = Public transport>
+			<image>16.png</image>
+			<color>#ffad33</color>
+		</nes_expense>
+		<nes_expense id = Shopping>
+			<image>17.png</image>
+			<color>#ff00ff</color>
+		</nes_expense>
+	</nes_expenses>
+</Categories>

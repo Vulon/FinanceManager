@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Categories>
+	<nes_incomes>
+		<nes_income id = "Salary">
+			<number>1</number>
+			<color>#adebad</color>
+		</nes_income>
+		<nes_income id = "Interest on deposits">
+			<number>2</number>
+			<color>#99ff33</color>
+		</nes_income>
+	</nes_incomes>
+	<nes_expenses>
+		<nes_expense id = "Products">
+			<number>3</number>
+			<color>#ff3333</color>
+		</nes_expense>
+<nes_expense id = "Medical service">
+			<number>4</number>
+			<color>#6699ff</color>
+		</nes_expense>
+<nes_expense id = "Medicines">
+			<number>5</number>
+			<color>#b3ccff</color>
+		</nes_expense>
+<nes_expense id = "Clothes">
+			<number>6</number>
+			<color>#b300b3</color>
+		</nes_expense>
+<nes_expense id = "Entertainment">
+			<number>7</number>
+			<color>#ffff1a</color>
+		</nes_expense>
+<nes_expense id = "Household chemicals">
+			<number>8</number>
+			<color>#b33c00</color>
+		</nes_expense>
+<nes_expense id = "Utility costs">
+			<number>9</number>
+			<color>#ff9999</color>
+		</nes_expense>
+<nes_expense id = "Rent, loan">
+			<number>10</number>
+			<color>#ff66ff</color>
+		</nes_expense>
+<nes_expense id = "Internet">
+			<number>11</number>
+			<color>#9966ff</color>
+		</nes_expense>
+<nes_expense id = "Mobile services">
+			<number>12</number>
+			<color>#7733ff</color>
+		</nes_expense>
+<nes_expense id = "Travel">
+			<number>13</number>
+			<color>#ff9900</color>
+		</nes_expense>
+<nes_expense id = "Fastfood">
+			<number>14</number>
+			<color>#ff3333</color>
+		</nes_expense>
+<nes_expense id = "Taxes">
+			<number>15</number>
+			<color>#c1c1f0</color>
+		</nes_expense>
+<nes_expense id = "Public transport">
+			<number>16</number>
+			<color>#ffad33</color>
+		</nes_expense>
+<nes_expense id = "Shopping">
+			<number>17</number>
+			<color>#ff00ff</color>
+		</nes_expense>
+	</nes_expenses>
+</Categories>

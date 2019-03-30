@@ -7,27 +7,24 @@ public class Transaction {
     private int amount;
     private Category category;
     private String note;
-    private Date date;
-    public static GregorianCalendar calendar;
+    public static String defaultTime = "00:00";
+    private GregorianCalendar calendar;
 
-    public Transaction(int amount, Category category,  Date date, String note) {
+    public Transaction(int amount, Category category,  long timeStamp, String note) {
         this.amount = amount;
         this.category = category;
         this.note = note;
-        this.date = date;
-        if(calendar == null){
-            calendar = new GregorianCalendar();
-        }
+        calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
     }
 
-    public Transaction(int amount, Category category, Date date) {
+    public Transaction(int amount, Category category, long timeStamp) {
         this.amount = amount;
         this.category = category;
-        this.date = date;
+
         note = "";
-        if(calendar == null){
-            calendar = new GregorianCalendar();
-        }
+        calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        calendar.setTimeInMillis(timeStamp);
     }
 
     public int getAmount() {
@@ -54,11 +51,18 @@ public class Transaction {
         this.note = note;
     }
 
-    public Date getDate() {
-        return date;
+    public long getDate() {
+        return calendar.getTimeInMillis();
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(long timeStamp) {
+        calendar.setTimeInMillis(timeStamp);
+    }
+
+    public GregorianCalendar getCalendar(){
+        return calendar;
+    }
+    public void setCalendar(GregorianCalendar calendar){
+        this.calendar = calendar;
     }
 }

@@ -14,6 +14,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Main extends Application {
@@ -36,6 +42,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(530);
         primaryStage.setTitle("Finance manager");
         authController.setUpSceneManager(sceneManager);
+
 
         primaryStage.show();
     }

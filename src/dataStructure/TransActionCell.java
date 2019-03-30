@@ -6,10 +6,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.spi.CalendarNameProvider;
 
 public class TransActionCell extends ListCell<Transaction> {
     @FXML
@@ -23,6 +29,8 @@ public class TransActionCell extends ListCell<Transaction> {
     @FXML
     private VBox cellLayout;
     FXMLLoader mLoader;
+    @FXML
+    private BorderPane iconPane;
 
     @Override
     protected void updateItem(Transaction item, boolean empty) {
@@ -42,17 +50,26 @@ public class TransActionCell extends ListCell<Transaction> {
                 e.printStackTrace();
             }
             amountLabel.setText(Integer.toString(item.getAmount()) + " р");
-            item.calendar.setTime(item.getDate());
-            String date = Integer.toString(item.calendar.get(Calendar.DAY_OF_MONTH));
-            date += "." + Integer.toString(item.calendar.get(Calendar.MONTH));
-            date += "." + Integer.toString(item.calendar.get(Calendar.YEAR));
-            date += " " + Integer.toString(item.calendar.get(Calendar.HOUR)) + ":";
-            date += Integer.toString(item.calendar.get(Calendar.MINUTE));
+            GregorianCalendar calendar = item.getCalendar();
+            String date = Integer.toString(calendar.get(Calendar.YEAR));
+            date += "." + Integer.toString(1 + calendar.get(Calendar.MONTH));
+            date += "." + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+            date += " " + Integer.toString(calendar.get(Calendar.HOUR)) + ":";
+            date += Integer.toString(calendar.get(Calendar.MINUTE));
             dateLabel.setText(date);
+            //dateLabel.setTextFill(Color.WHITE);
+            //noteLabel.setTextFill(Color.WHITE);
+            if(item.getCategory().checkIsIncome()){
+                amountLabel.setTextFill(Color.GREEN);
+            }else{
+                amountLabel.setTextFill(Color.RED);
+            }
             noteLabel.setText(item.getNote());
-            iconView.setStyle("-fx-background-color: transparent");
-            String layoutColor = "-fx-background-color: #" + item.getCategory().getColor().toString().substring(2, 10);
-            cellLayout.setStyle(layoutColor);
+            String layoutColor = "-fx-background-color: " + item.getCategory().getColor();
+            //iconView.setStyle("-fx-background-color: transparent");
+            //iconView.setStyle(layoutColor);
+            iconPane.setStyle(layoutColor);
+            //cellLayout.setStyle(layoutColor);
             if (noteLabel.getText().equals("")){
                 noteLabel.setVisible(false);
             }else{
@@ -60,6 +77,9 @@ public class TransActionCell extends ListCell<Transaction> {
             }
             String imagePath = "icons/" + Integer.toString(item.getCategory().getIconId()) + ".png";
             iconView.setImage(new Image(imagePath));
+            noteLabel.setTextAlignment(TextAlignment.JUSTIFY);
+            noteLabel.setWrapText(true);
+
 
             setText(null);
             setGraphic(cellLayout);

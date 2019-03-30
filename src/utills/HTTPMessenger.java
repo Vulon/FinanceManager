@@ -4,12 +4,10 @@ import dataStructure.Category;
 import dataStructure.Transaction;
 import javafx.collections.ObservableList;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HTTPMessenger {
     private static final String urlMainPath ="http://localhost:8080";
