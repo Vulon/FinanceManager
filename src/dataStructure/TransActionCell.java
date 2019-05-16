@@ -49,7 +49,7 @@ public class TransActionCell extends ListCell<Transaction> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            amountLabel.setText(Integer.toString(item.getAmount()) + " р");
+            amountLabel.setText(Double.toString(item.getAmount()) + " р");
             GregorianCalendar calendar = item.getCalendar();
             String date = Integer.toString(calendar.get(Calendar.YEAR));
             date += "." + Integer.toString(1 + calendar.get(Calendar.MONTH));

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="882.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="882.0" xmlns="http://javafx.com/javafx/8.0.128" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -25,13 +25,18 @@
                <children>
                   <VBox alignment="CENTER" maxHeight="72.0" minWidth="-Infinity" prefHeight="72.0" prefWidth="247.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="100.0" prefWidth="259.0">
                            <children>
                               <Button maxWidth="128.0" minWidth="128.0" mnemonicParsing="false" onAction="#addTransaction" prefWidth="128.0" text="Add Transaction" />
-                              <Button maxWidth="128.0" minWidth="128.0" mnemonicParsing="false" prefWidth="128.0" text="Add category" />
+                              <Button maxWidth="128.0" minWidth="128.0" mnemonicParsing="false" onAction="#addCategory" prefWidth="128.0" text="Add category" />
                            </children>
                         </HBox>
-                        <ChoiceBox fx:id="monthPicker" prefWidth="150.0" />
+                        <HBox alignment="CENTER">
+                           <children>
+                              <ChoiceBox fx:id="yearPicker" prefHeight="26.0" prefWidth="70.0" />
+                              <ChoiceBox fx:id="monthPicker" prefHeight="26.0" prefWidth="108.0" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <ListView fx:id="listView" maxHeight="1200.0" prefHeight="476.0" prefWidth="243.0" VBox.vgrow="ALWAYS" />

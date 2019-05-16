@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Transaction {
-    private int amount;
+    private double amount;     /* changed from int, has to be double*/
     private Category category;
     private String note;
     public static String defaultTime = "00:00";
     private GregorianCalendar calendar;
 
-    public Transaction(int amount, Category category,  long timeStamp, String note) {
+    public Transaction(double amount, Category category,  long timeStamp, String note) {
         this.amount = amount;
         this.category = category;
         this.note = note;
@@ -18,7 +18,7 @@ public class Transaction {
         calendar.setTimeInMillis(timeStamp);
     }
 
-    public Transaction(int amount, Category category, long timeStamp) {
+    public Transaction(double amount, Category category, long timeStamp) {
         this.amount = amount;
         this.category = category;
 
@@ -27,11 +27,11 @@ public class Transaction {
         calendar.setTimeInMillis(timeStamp);
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
