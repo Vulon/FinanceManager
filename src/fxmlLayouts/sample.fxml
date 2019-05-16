@@ -11,10 +11,44 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AuthController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AuthController">
    <children>
       <TabPane layoutX="52.0" layoutY="53.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="504.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <tabs>
+          <Tab text="Sign IN">
+            <content>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label text="Login" />
+                        <TextField fx:id="loginINfield" maxWidth="200.0" minWidth="150.0" prefWidth="150.0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin></TextField>
+                        <Label text="Password">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin></Label>
+                        <PasswordField fx:id="passINField" maxWidth="200.0" minWidth="150.0" prefWidth="150.0">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin></PasswordField>
+                        <CheckBox fx:id="rememberPass" mnemonicParsing="false" text="Remember Password">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin></CheckBox>
+                        <Button fx:id="signINButton" mnemonicParsing="false" onAction="#signINHandler" prefHeight="31.0" prefWidth="188.0" text="Sign IN">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin></Button>
+                        <Label fx:id="errorMsg2" text="Error Message" textFill="#dd0000" visible="false">
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+            </content>
+          </Tab>
           <Tab text="Sign UP">
             <content>
                   <VBox alignment="CENTER">
@@ -50,40 +84,6 @@
                            </VBox.margin>
                         </Label>
                         <Button mnemonicParsing="false" onAction="#testHandler" text="TestButton" />
-                     </children>
-                  </VBox>
-            </content>
-          </Tab>
-          <Tab text="Sign IN">
-            <content>
-                  <VBox alignment="CENTER">
-                     <children>
-                        <Label text="Login" />
-                        <TextField fx:id="loginINfield" maxWidth="200.0" minWidth="150.0" prefWidth="150.0">
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin></TextField>
-                        <Label text="Password">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin></Label>
-                        <PasswordField fx:id="passINField" maxWidth="200.0" minWidth="150.0" prefWidth="150.0">
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin></PasswordField>
-                        <CheckBox fx:id="rememberPass" mnemonicParsing="false" text="Remember Password">
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin></CheckBox>
-                        <Button fx:id="signINButton" mnemonicParsing="false" onAction="#signINHandler" prefHeight="31.0" prefWidth="188.0" text="Sign IN">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin></Button>
-                        <Label fx:id="errorMsg2" text="Error Message" textFill="#dd0000" visible="false">
-                           <VBox.margin>
-                              <Insets top="40.0" />
-                           </VBox.margin>
-                        </Label>
                      </children>
                   </VBox>
             </content>

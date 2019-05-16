@@ -32,17 +32,18 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../fxmlLayouts/sample.fxml"));
         Parent root = loader.load();
+
         mainScene = new Scene(root, 800, 600);
         sceneManager = new SceneManager(mainScene);
         sceneManager.addScreen("auth", (AnchorPane)FXMLLoader.load(getClass().getResource("../fxmlLayouts/sample.fxml")));
         sceneManager.addScreen("main", (GridPane)FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
         primaryStage.setScene(mainScene);
+
         authController = loader.getController();
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(530);
         primaryStage.setTitle("Finance manager");
         authController.setUpSceneManager(sceneManager);
-
 
         primaryStage.show();
     }
