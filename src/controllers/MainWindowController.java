@@ -14,10 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utills.HTTPMessenger;
 import utills.XMLParser;
 
@@ -35,6 +35,10 @@ public class MainWindowController implements Initializable {
     @FXML private ListView<Category> categoryList;
     @FXML private PieChart pieChart;
     @FXML private VBox chartBox;
+    @FXML private Button budgetButton;
+    @FXML private Label budgetLabel;
+    @FXML private TextField budgetSettings;
+
     private BarChart barChart;
     private ObservableList<Transaction> transactionObservableList;
     private ObservableList<Transaction> thisMonthTransactions;
@@ -42,6 +46,7 @@ public class MainWindowController implements Initializable {
     private ObservableList<Category> categories;
     private ObservableList<Month> monthsList;
     private ObservableList<Integer> yearList;
+    private Budget budget;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,6 +66,10 @@ public class MainWindowController implements Initializable {
         monthPicker.setValue(monthsList.get(monthsList.size() - 1));
         yearPicker.setValue(yearList.get(yearList.size() - 1));
         updateTransactionList();
+
+
+        budget = Budget.getInstance();
+
 
 
         listView.setItems(thisMonthTransactions);
@@ -85,6 +94,7 @@ public class MainWindowController implements Initializable {
                                         */
             }
         });
+
     }
 
     public MainWindowController() {
@@ -133,11 +143,6 @@ public class MainWindowController implements Initializable {
             i = 0;
         }
 
-        for(Transaction tr : thisMonthTransactions){
-            if(!tr.getCategory().checkIsIncome()){
-                chartData[tr.getCategory().getID()]+= tr.getAmount();
-            }
-        }
         for(Category category : categories){
             if(chartData[category.getID()] > 0){
                 PieChart.Data slice = new PieChart.Data(category.getName(), chartData[category.getID()]);
@@ -145,6 +150,7 @@ public class MainWindowController implements Initializable {
                 slice.getNode().setStyle("-fx-pie-color: " + category.getColor());
             }
         }
+        updateBudget();
 
     }
 
@@ -288,5 +294,44 @@ public class MainWindowController implements Initializable {
 
     //Deya started programming HERE:
     public void addCategory(ActionEvent actionEvent) {
+    }
+    private void updateBudget(){
+        int totalSpent = 0;
+        for(Transaction tr : thisMonthTransactions){
+            if(!tr.getCategory().checkIsIncome()){
+                totalSpent += tr.getAmount();
+            }
+        }
+        Integer monthKey = ((Month)monthPicker.getSelectionModel().getSelectedItem()).ordinal();
+        Integer yearKey = (Integer)yearPicker.getSelectionModel().getSelectedItem();
+        System.out.println("Budget check: " + monthKey.toString());
+        if (budget.history.containsKey(new Pair<>(monthKey, yearKey))){
+            budget.currentLimit = budget.history.get(new Pair<>(monthKey, yearKey));
+        }else{
+            budget.currentLimit = budget.defaultValue;
+        }
+        if(totalSpent > budget.currentLimit){
+            budgetLabel.setStyle("-fx-text-fill: red");
+        }else{
+            budgetLabel.setStyle("-fx-text-fill: green");
+        }
+        budgetLabel.setText("Spent this month: " + Integer.toString(totalSpent) + "/ limit: " + Integer.toString(budget.currentLimit));
+    }
+    @FXML private void budgetButtonHandler(){
+        Integer monthKey = ((Month)monthPicker.getSelectionModel().getSelectedItem()).ordinal();
+        Integer yearKey = (Integer)yearPicker.getSelectionModel().getSelectedItem();
+
+        try{
+            int limit = Integer.valueOf(budgetSettings.getText());
+            if(budget.history.containsKey(new Pair(monthKey, yearKey))){
+                budget.history.replace(new Pair<>(monthKey, yearKey), limit);
+            }else{
+                budget.history.put(new Pair<>(monthKey, yearKey), limit);
+            }
+            updateBudget();
+        }catch (Exception e){
+
+        }
+
     }
 }

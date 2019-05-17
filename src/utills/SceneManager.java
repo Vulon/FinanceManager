@@ -7,9 +7,18 @@ import java.util.HashMap;
 
 public class SceneManager {
     private Scene mainScene;
-    private HashMap<String, Pane> scenes;
-    public SceneManager(Scene mainScene) {
+    private static SceneManager link;
+    public static SceneManager getInstance(){
+        if(link == null){
+            link = new SceneManager();
+        }
+        return link;
+    }
+    public void setUpMainSccene(Scene mainScene){
         this.mainScene = mainScene;
+    }
+    private HashMap<String, Pane> scenes;
+    private SceneManager(){
         scenes = new HashMap<String, Pane>();
     }
     public void addScreen(String name, Pane pane){

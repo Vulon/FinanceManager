@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="882.0" xmlns="http://javafx.com/javafx/8.0.128" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="614.0" prefWidth="882.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainWindowController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -45,6 +49,25 @@
             <VBox fx:id="chartBox" maxHeight="Infinity" prefHeight="462.0" prefWidth="413.0">
                <children>
                   <PieChart fx:id="pieChart" maxHeight="Infinity" />
+                  <BorderPane prefHeight="108.0" prefWidth="614.0">
+                     <left>
+                        <Label fx:id="budgetLabel" prefHeight="21.0" text="Budget Label" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </BorderPane.margin>
+                        </Label>
+                     </left>
+                     <right>
+                        <Button fx:id="budgetButton" mnemonicParsing="false" onAction="#budgetButtonHandler" prefHeight="31.0" prefWidth="160.0" text="Apply" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Button>
+                     </right>
+                     <center>
+                        <TextField fx:id="budgetSettings" prefHeight="31.0" promptText="Set this month limit" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
                   <ListView fx:id="categoryList" minHeight="64.0" orientation="HORIZONTAL" prefHeight="93.0" prefWidth="614.0" />
                </children>
             </VBox>

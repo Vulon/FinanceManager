@@ -141,58 +141,9 @@ public class TransactionDialogController implements Initializable {
             applyButton.setDisable(true);
         }
 
-//        if(isNumber(amountField.getText())){
-//            amountField.setStyle("-fx-text-fill: green");
-//            applyButton.setDisable(false);
-//        }else{
-//            amountField.setStyle("-fx-text-fill: red");
-//            applyButton.setDisable(true);
-//        }
+//
     }
 
-
-// No longer needed, as the Time Picker control handles these methods
-    /** {@link TransactionDialogController#timePicker} */
-//    @FXML
-//    private void timeFieldHandler(){
-//        if(checkTime()){
-//            timeField.setStyle("-fx-text-fill: green");
-//            isTimeCorrect = true;
-//        }else{
-//            timeField.setStyle("-fx-text-fill: red");
-//            isTimeCorrect = false;
-//        }
-//    }
-
-//    private boolean checkTime(){
-//        boolean flag = true;
-//        String line = timeField.getText();
-//        System.out.println("The time field is " + line);
-//        if(line.length() != 5){
-//            flag = false;
-//            System.out.println("Lenght is wrong");
-//        }
-//
-//        if('0' <=line.charAt(0) && line.charAt(0) <= '1'){
-//            if('9' < line.charAt(1) || line.charAt(1) < '0'){
-//                return false;
-//            }
-//        }else if(line.charAt(0) == '2'){
-//            if('0' > line.charAt(1)  || line.charAt(1) > '4'){
-//                return false;
-//            }
-//        }else {
-//            return false;
-//        }
-//        if('0' > line.charAt(3) || line.charAt(3) > '5'){
-//            return false;
-//        }
-//        if('0' > line.charAt(4) || line.charAt(4) > '9'){
-//            return false;
-//        }
-//
-//        return flag;
-//    }
     @FXML
     private void applyButtonHandler(ActionEvent actionEvent){
 
@@ -247,22 +198,4 @@ public class TransactionDialogController implements Initializable {
         Stage stage  = (Stage) source.getScene().getWindow();
         stage.close();
     }
-
-// No longer needed, as the Time Picker control handles these methods
-                        /** {@link TransactionDialogController#timePicker} */
-//    private int getHours(){
-//
-//        if(isTimeCorrect){
-//            return Integer.parseInt(timeField.getText().substring(0, 2));
-//        }else{
-//            return 0;
-//        }
-//    }
-//    private int getMins(){
-//        if(isTimeCorrect){
-//            return Integer.parseInt(timeField.getText().substring(3, 5));
-//        }else{
-//            return 0;
-//        }
-//    }
 }
