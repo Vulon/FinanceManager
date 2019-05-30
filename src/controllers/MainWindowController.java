@@ -129,6 +129,22 @@ public class MainWindowController implements Initializable {
                 slice.getNode().setStyle("-fx-pie-color: " + category.getColor());
             }
         }
+        /* Added pie chart on hover percent tooltip */
+
+        //Get total price of all slices
+        double t = 0;
+        for (PieChart.Data d : pieChart.getData()) {
+            t += d.getPieValue();
+        }
+        final double total = t;
+
+        pieChart.getData().forEach(data -> {
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(String.format("%.1f%%", 100*data.getPieValue()/total));
+            Tooltip.install(data.getNode(), tooltip);
+            data.pieValueProperty().addListener((observable, oldValue, newValue) ->
+                    tooltip.setText(newValue + "%"));
+        });
     }
 
     private void initializeYearPicker(){

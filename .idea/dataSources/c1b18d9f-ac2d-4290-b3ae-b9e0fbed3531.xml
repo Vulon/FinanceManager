@@ -42,6 +42,7 @@
     <column id="14" parent="6" name="ID">
       <Position>1</Position>
       <DataType>INTEGER(10)|4s</DataType>
+      <NotNull>1</NotNull>
     </column>
     <column id="15" parent="6" name="NAME">
       <Position>2</Position>
@@ -59,52 +60,69 @@
       <Position>5</Position>
       <DataType>BOOLEAN|16s</DataType>
     </column>
-    <column id="19" parent="7" name="ID">
-      <Position>1</Position>
-      <DataType>INTEGER(10)|4s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="20" parent="7" name="AMOUNT">
-      <Position>2</Position>
-      <DataType>DOUBLE(17)|8s</DataType>
-    </column>
-    <column id="21" parent="7" name="TIMESTAMP">
-      <Position>3</Position>
-      <DataType>BIGINT(19)|-5s</DataType>
-    </column>
-    <column id="22" parent="7" name="CATEGORY_ID">
-      <Position>4</Position>
-      <DataType>INTEGER(10)|4s</DataType>
-    </column>
-    <column id="23" parent="7" name="NOTE">
-      <Position>5</Position>
-      <DataType>VARCHAR(40)|12s</DataType>
-    </column>
-    <index id="24" parent="7" name="PRIMARY_KEY_F">
+    <index id="19" parent="6" name="PRIMARY_KEY_3">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="25" parent="7" name="TRANSACTION_PK">
+    <key id="20" parent="6" name="CATEGORY_PK">
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="26" parent="8" name="EMAIL">
+    <column id="21" parent="7" name="ID">
+      <Position>1</Position>
+      <DataType>INTEGER(10)|4s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="22" parent="7" name="AMOUNT">
+      <Position>2</Position>
+      <DataType>DOUBLE(17)|8s</DataType>
+    </column>
+    <column id="23" parent="7" name="TIMESTAMP">
+      <Position>3</Position>
+      <DataType>BIGINT(19)|-5s</DataType>
+    </column>
+    <column id="24" parent="7" name="CATEGORY_ID">
+      <Position>4</Position>
+      <DataType>INTEGER(10)|4s</DataType>
+    </column>
+    <column id="25" parent="7" name="NOTE">
+      <Position>5</Position>
+      <DataType>VARCHAR(40)|12s</DataType>
+    </column>
+    <index id="26" parent="7" name="PRIMARY_KEY_F">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="27" parent="7" name="TRANSACTION_PK">
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="28" parent="8" name="EMAIL">
       <Position>1</Position>
       <DataType>VARCHAR(30)|12s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="27" parent="8" name="PASSWORD">
+    <column id="29" parent="8" name="PASSWORD">
       <Position>2</Position>
       <DataType>VARCHAR(30)|12s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="28" parent="8" name="PRIMARY_KEY_B">
+    <column id="30" parent="8" name="TOKEN">
+      <Position>3</Position>
+      <DataType>VARCHAR(50)|12s</DataType>
+    </column>
+    <column id="31" parent="8" name="REFRESH">
+      <Position>4</Position>
+      <DataType>VARCHAR(50)|12s</DataType>
+    </column>
+    <index id="32" parent="8" name="PRIMARY_KEY_17">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>EMAIL</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="29" parent="8" name="USER_DATA_PK">
+    <key id="33" parent="8" name="USER_DATA_PK">
       <ColNames>EMAIL</ColNames>
       <Primary>1</Primary>
     </key>

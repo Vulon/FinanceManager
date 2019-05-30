@@ -106,8 +106,8 @@ public class TransactionDialogController implements Initializable {
             Transaction transaction = databaseManager.getTransaction(transactionID);
             Calendar calendar = GregorianCalendar.getInstance();
             calendar.setTimeInMillis(transaction.getDate());
-            datePicker.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)));
-            timePicker.setValue(LocalTime.of(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), 0));
+            datePicker.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
+            timePicker.setValue(LocalTime.of(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), 0));
             selectedCategory = transaction.getCategory();
             amountField.setText(Double.toString(transaction.getAmount()));
             noteArea.setText(transaction.getNote());

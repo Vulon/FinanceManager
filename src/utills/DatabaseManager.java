@@ -29,9 +29,38 @@ public class DatabaseManager {
         try{
             Class.forName(DRIVER_NAME);
             connection = DriverManager.getConnection(DATABASE_URL, "app", "2546");
+            createTables();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    private void createTables(){
+        try{
+            Statement catStatement = connection.createStatement();
+            String sql = "CREATE TABLE IF NOT EXISTS CATEGORY(ID INT PRIMARY KEY," +
+                    " NAME VARCHAR(20), COLOR VARCHAR(7), ICONID SMALLINT, IS_INCOME BIT)";
+            catStatement.executeUpdate(sql);
+            Statement trStatement = connection.createStatement();
+            sql = "CREATE TABLE IF NOT EXISTS TRANSACTION (ID INT PRIMARY KEY, AMOUNT DOUBLE, TIMESTAMP LONG, " +
+                    "CATEGORY_ID INT, NOTE VARCHAR(40))";
+            trStatement.executeUpdate(sql);
+            Statement budStatement = connection.createStatement();
+            sql = "CREATE TABLE IF NOT EXISTS BUDGET (MONTH SMALLINT PRIMARY KEY, YEAR SMALLINT PRIMARY KEY , LIMIT DOUBLE)";
+            budStatement.executeUpdate(sql);
+            Statement userStatement = connection.createStatement();
+            sql = "CREATE TABLE IF NOT EXISTS USER_DATA (EMAIL VARCHAR(30) PRIMARY KEY, PASSWORD VARCHAR(30)" +
+                    ", TOKEN VARCHAR(50), REFRESH VARCHAR(50))";
+            userStatement.executeUpdate(sql);
+            catStatement.close();
+            trStatement.close();
+            budStatement.close();
+            userStatement.close();
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
     public void disconnect(){
         try {
@@ -113,6 +142,7 @@ public class DatabaseManager {
                 int iconId = resultSet.getInt("iconid");
                 boolean is_income = resultSet.getBoolean("is_income");
                 categories.add(new Category(id, name, color, iconId, is_income));
+                System.out.println("found " + name + " category");
             }
             statement.close();
         }catch (Exception e){

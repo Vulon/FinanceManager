@@ -47,6 +47,13 @@
         <item name="app_data" type="feb32156:DbDataSourceImpl" />
         <item name="APP_DATA: database" type="2aa06773:H2ImplModel$Database" />
         <item name="PUBLIC: schema" type="7f85d983:H2ImplModel$Schema" />
+        <item name="BUDGET: table" type="818c1b4a:H2ImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="app_data" type="feb32156:DbDataSourceImpl" />
+        <item name="APP_DATA: database" type="2aa06773:H2ImplModel$Database" />
+        <item name="PUBLIC: schema" type="7f85d983:H2ImplModel$Schema" />
         <item name="CATEGORY: table" type="818c1b4a:H2ImplModel$Table" />
       </path>
       <path>
@@ -55,6 +62,13 @@
         <item name="APP_DATA: database" type="2aa06773:H2ImplModel$Database" />
         <item name="PUBLIC: schema" type="7f85d983:H2ImplModel$Schema" />
         <item name="TRANSACTION: table" type="818c1b4a:H2ImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="app_data" type="feb32156:DbDataSourceImpl" />
+        <item name="APP_DATA: database" type="2aa06773:H2ImplModel$Database" />
+        <item name="PUBLIC: schema" type="7f85d983:H2ImplModel$Schema" />
+        <item name="USER_DATA: table" type="818c1b4a:H2ImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -108,8 +122,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controllers/MainWindowController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="296" column="18" selection-start-line="296" selection-start-column="12" selection-end-line="296" selection-end-column="18" />
+            <state relative-caret-position="75">
+              <caret line="146" column="11" selection-start-line="146" selection-start-column="11" selection-end-line="146" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -130,11 +144,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controllers/TransactionDialogController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="154" column="16" lean-forward="true" selection-start-line="154" selection-start-column="16" selection-end-line="154" selection-end-column="16" />
+            <state relative-caret-position="-626">
+              <caret line="109" column="78" selection-start-line="109" selection-start-column="78" selection-end-line="109" selection-end-column="78" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/c1b18d9f-ac2d-4290-b3ae-b9e0fbed3531/console.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -170,11 +193,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/utills/DatabaseManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="317" column="29" lean-forward="true" selection-start-line="317" selection-start-column="29" selection-end-line="317" selection-end-column="29" />
+            <state relative-caret-position="100">
+              <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#disconnect#0;class#DatabaseManager#0" />
@@ -183,10 +206,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dataStructure/Transaction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="581">
+            <state relative-caret-position="1190">
               <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
             </state>
           </provider>
@@ -217,7 +240,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>initialize</find>
       <find>catego</find>
       <find>category</find>
       <find>month</find>
@@ -246,6 +268,7 @@
       <find>delete</find>
       <find>updateBudget</find>
       <find>disable</find>
+      <find>LocalDate</find>
       <find>system</find>
     </findStrings>
   </component>
@@ -290,16 +313,16 @@
         <option value="$PROJECT_DIR$/src/config/cat.xml" />
         <option value="$PROJECT_DIR$/src/utills/XMLParser.java" />
         <option value="$PROJECT_DIR$/src/controllers/AuthController.java" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/c1b18d9f-ac2d-4290-b3ae-b9e0fbed3531/console.sql" />
         <option value="$PROJECT_DIR$/src/fxmlLayouts/newTransactionDialog.fxml" />
         <option value="$PROJECT_DIR$/src/utills/HTTPMessenger.java" />
         <option value="$PROJECT_DIR$/src/Debug/MyRandomGenerator.java" />
         <option value="$PROJECT_DIR$/src/dataStructure/ObservableData.java" />
         <option value="$PROJECT_DIR$/src/fxmlLayouts/mainWindow.fxml" />
+        <option value="$PROJECT_DIR$/src/dataStructure/Transaction.java" />
         <option value="$PROJECT_DIR$/src/controllers/TransactionDialogController.java" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/c1b18d9f-ac2d-4290-b3ae-b9e0fbed3531/console.sql" />
         <option value="$PROJECT_DIR$/src/controllers/MainWindowController.java" />
         <option value="$PROJECT_DIR$/src/utills/DatabaseManager.java" />
-        <option value="$PROJECT_DIR$/src/dataStructure/Transaction.java" />
       </list>
     </option>
   </component>
@@ -554,12 +577,12 @@
       <workItem from="1558033691973" duration="1073000" />
       <workItem from="1558074226837" duration="5185000" />
       <workItem from="1559158694622" duration="3936000" />
-      <workItem from="1559204057914" duration="26577000" />
+      <workItem from="1559204057914" duration="29035000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="157597000" />
+    <option name="totallyTimeSpent" value="160055000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -578,14 +601,14 @@
       <window_info id="Image Layers" order="1" />
       <window_info id="UI Designer" order="2" />
       <window_info id="Capture Tool" order="3" />
-      <window_info active="true" content_ui="combo" id="Project" order="4" sideWeight="0.6703755" visible="true" weight="0.17986578" />
+      <window_info content_ui="combo" id="Project" order="4" sideWeight="0.6703755" visible="true" weight="0.17986578" />
       <window_info id="Structure" order="5" weight="0.17986578" />
       <window_info id="Favorites" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="0" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32907802" />
       <window_info anchor="bottom" id="Message" order="2" />
       <window_info anchor="bottom" id="Find" order="3" weight="0.32719547" />
-      <window_info anchor="bottom" id="Run" order="4" visible="true" weight="0.3696884" />
+      <window_info anchor="bottom" id="Run" order="4" visible="true" weight="0.13314448" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Debug" order="6" weight="0.35460994" />
       <window_info anchor="bottom" id="Inspection" order="7" weight="0.4" />
@@ -606,7 +629,7 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
       <window_info anchor="right" id="JetGradle" order="5" />
       <window_info anchor="right" id="Ant Build" order="6" weight="0.25" />
-      <window_info anchor="right" id="Database" order="7" weight="0.16778524" />
+      <window_info active="true" anchor="right" id="Database" order="7" visible="true" weight="0.16778524" />
       <window_info anchor="right" id="Palette" order="8" />
       <window_info anchor="right" id="Maven Projects" order="9" />
       <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="10" side_tool="true" weight="0.3295302" />
@@ -885,13 +908,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/c1b18d9f-ac2d-4290-b3ae-b9e0fbed3531/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="26" selection-start-column="26" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dataStructure/Budget.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="106">
@@ -1021,20 +1037,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/dataStructure/Transaction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/controllers/TransactionDialogController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="154" column="16" lean-forward="true" selection-start-line="154" selection-start-column="16" selection-end-line="154" selection-end-column="16" />
+        <state relative-caret-position="-626">
+          <caret line="109" column="78" selection-start-line="109" selection-start-column="78" selection-end-line="109" selection-end-column="78" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/c1b18d9f-ac2d-4290-b3ae-b9e0fbed3531/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/controllers/MainWindowController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="296" column="18" selection-start-line="296" selection-start-column="12" selection-end-line="296" selection-end-column="18" />
+        <state relative-caret-position="75">
+          <caret line="146" column="11" selection-start-line="146" selection-start-column="11" selection-end-line="146" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1043,19 +1073,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utills/DatabaseManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="317" column="29" lean-forward="true" selection-start-line="317" selection-start-column="29" selection-end-line="317" selection-end-column="29" />
+        <state relative-caret-position="100">
+          <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#disconnect#0;class#DatabaseManager#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dataStructure/Transaction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="581">
-          <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
         </state>
       </provider>
     </entry>
