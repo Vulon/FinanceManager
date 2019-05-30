@@ -1,6 +1,5 @@
 package controllers;
 
-import Debug.MyRandomGenerator;
 import dataStructure.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -23,7 +23,7 @@ import java.util.*;
 
 public class MainWindowController implements Initializable {
 
-    @FXML private ListView<Transaction> listView;
+    @FXML private ListView<Transaction> transactionListView;
     @FXML private ChoiceBox monthPicker;
     @FXML private ChoiceBox yearPicker;
     @FXML private ListView<Category> categoryList;
@@ -54,9 +54,6 @@ public class MainWindowController implements Initializable {
         }
         if(!monthsList.contains(Month.values()[GregorianCalendar.getInstance().get(Calendar.MONTH)])){
             monthsList.add(Month.values()[GregorianCalendar.getInstance().get(Calendar.MONTH)]);
-//            monthPicker.setValue(monthsList.get(monthsList.size() - 1));
-//        }else{
-//            monthPicker.setValue(monthsList.get(monthsList.size() - 1));
         }
         monthPicker.setValue(monthsList.get(monthsList.size() - 1));
         yearPicker.setValue(yearList.get(yearList.size() - 1));
@@ -64,17 +61,18 @@ public class MainWindowController implements Initializable {
 
         budget = Budget.getInstance();
 
-        listView.setItems(thisMonthTransactions);
-        listView.setCellFactory(listView -> new TransActionCell());
+        transactionListView.setItems(thisMonthTransactions);
+        transactionListView.setCellFactory(listView -> new TransActionCell());
         categoryList.setItems(categories);
         categoryList.setCellFactory(categoryList -> new categoryCell());
-        listView.setFixedCellSize(110);
+        transactionListView.setFixedCellSize(110);
 
         initializePieChart();
         initializeMonthPicker();
         initializeYearPicker();
         initializeBarChart();
         updateBudget();
+
     }
 
     public MainWindowController() {
@@ -211,7 +209,6 @@ public class MainWindowController implements Initializable {
     private void updateTransactionList(){
         Month selectedM = (Month)monthPicker.getValue();
         int selectedY = (int)yearPicker.getValue();
-        System.out.println("selected value : " + selectedY + " " + selectedM + "(" + selectedM.ordinal() + ")");
 
         thisMonthTransactions.clear();
         thisMonthTransactions.addAll(databaseManager.getThisMonthTransactions(selectedY, selectedM.ordinal()));
@@ -264,11 +261,8 @@ public class MainWindowController implements Initializable {
                 totalSpent += tr.getAmount();
             }
         }
-        System.out.println(monthPicker.getSelectionModel().isEmpty());
-        System.out.println(((Month)monthPicker.getSelectionModel().getSelectedItem()).toString());
         Integer monthKey = ((Month)monthPicker.getSelectionModel().getSelectedItem()).ordinal();
         Integer yearKey = (Integer)yearPicker.getSelectionModel().getSelectedItem();
-        System.out.println("Budget check: " + monthKey.toString());
         if (budget.history.containsKey(new Pair<>(monthKey, yearKey))){
             budget.currentLimit = budget.history.get(new Pair<>(monthKey, yearKey));
         }else{
@@ -306,7 +300,31 @@ public class MainWindowController implements Initializable {
             updateYearPicker();
             updateMonthPicker();
             updateBudget();
-
+            updateTransactionList();
         }
+    }
+    @FXML public void handleTransactionListEvent(MouseEvent arg0){
+        try{
+            Transaction transaction = transactionListView.getSelectionModel().getSelectedItem();
+            Stage newTransactionDialog = new Stage();
+            FXMLLoader ntLoader = new FXMLLoader(getClass().getResource("../fxmlLayouts/newTransactionDialog.fxml"));
+            Scene mainScene = new Scene(ntLoader.load(), 700, 580);     //Changed from 600: 400
+            newTransactionDialog.setMinHeight(580);
+            newTransactionDialog.setMinWidth(700);
+            newTransactionDialog.setScene(mainScene);
+
+            TransactionDialogController newTransactionController = ntLoader.<TransactionDialogController>getController();
+            ObservableData observable = new ObservableData();
+            observer = new DataChangeObserver();
+            observable.addObserver(observer);
+            newTransactionController.setReturnReference(observable, TransactionDialogController.MODIFY_MODE, transaction.getId());
+
+            newTransactionDialog.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
     }
 }

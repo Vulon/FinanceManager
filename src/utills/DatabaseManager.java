@@ -41,7 +41,6 @@ public class DatabaseManager {
         }
     }
     public void insertBaseCategories(){
-        System.out.println("ENTERED INSERT");
         try {
             XMLParser parser = new XMLParser();
             ArrayList<Category> categories = parser.getNesIncomes();
@@ -150,8 +149,6 @@ public class DatabaseManager {
             long timestart = calendar.getTimeInMillis() / 1000;
             calendar.add(Calendar.MONTH, 1);
             long timeend = calendar.getTimeInMillis() / 1000;
-            System.out.println("TIme in mills: " + calendar.getTimeInMillis());
-            System.out.println("timestamp: " +  timestart);
             String sql = "SELECT * FROM TRANSACTION WHERE TIMESTAMP >= " + timestart + " AND TIMESTAMP <= " + timeend;
             ResultSet resultSet = selectStatement.executeQuery(sql);
             while (resultSet.next()){
@@ -209,8 +206,6 @@ public class DatabaseManager {
                     long date = resultSet.getLong("timestamp") * 1000;
                     Calendar calendar = GregorianCalendar.getInstance();
                     calendar.setTimeInMillis(date);
-                    System.out.println(amount + " - " + calendar.get(Calendar.YEAR) + "." + calendar.get(Calendar.MONTH) + "."
-                    + calendar.get(Calendar.DAY_OF_MONTH));
                     int category_id = resultSet.getInt("category_id");
                     String note = resultSet.getString("note");
                     Category category = getCategoryById(category_id);
@@ -293,7 +288,7 @@ public class DatabaseManager {
     public Transaction getTransaction(int id){
         try {
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM TRANSACTION WHERE ID == " + id;
+            String sql = "SELECT * FROM TRANSACTION WHERE ID = " + id;
             ResultSet resultSet = statement.executeQuery(sql);
             if(resultSet.next()){
                 double amount = resultSet.getDouble("amount");
@@ -315,8 +310,8 @@ public class DatabaseManager {
         try{
             Statement statement = connection.createStatement();
             String sql = "UPDATE TRANSACTION SET AMOUNT = " + transaction.getAmount()
-                    +" TIMESTAMP = "+ transaction.getDate() /1000 + " CATEGORY_ID = " + transaction.getCategory().getID()
-                    + " NOTE = " + transaction.getNote() + " WHERE ID = " + transaction.getId();
+                    +", TIMESTAMP = "+ transaction.getDate() /1000 + ", CATEGORY_ID = " + transaction.getCategory().getID()
+                    + ", NOTE = '" + transaction.getNote() + "' WHERE ID = " + transaction.getId();
             statement.executeUpdate(sql);
 
             statement.close();

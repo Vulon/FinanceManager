@@ -43,7 +43,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <ListView fx:id="listView" maxHeight="1200.0" prefHeight="476.0" prefWidth="243.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="transactionListView" maxHeight="1200.0" onMouseClicked="#handleTransactionListEvent" prefHeight="476.0" prefWidth="243.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox fx:id="chartBox" maxHeight="Infinity" prefHeight="462.0" prefWidth="413.0">

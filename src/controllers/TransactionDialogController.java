@@ -101,6 +101,7 @@ public class TransactionDialogController implements Initializable {
         if(MODE == CREATE_MODE){
             datePicker.setValue(LocalDate.now());
             timePicker.setValue(LocalTime.now());
+            applyButton.setDisable(true);
         }else{
             Transaction transaction = databaseManager.getTransaction(transactionID);
             Calendar calendar = GregorianCalendar.getInstance();
@@ -110,11 +111,12 @@ public class TransactionDialogController implements Initializable {
             selectedCategory = transaction.getCategory();
             amountField.setText(Double.toString(transaction.getAmount()));
             noteArea.setText(transaction.getNote());
+            applyButton.setDisable(false);
         }
 
         timePicker.set24HourView(true);
 
-        applyButton.setDisable(true);
+
         datePicker.requestFocus();
 
         amountField.textProperty().addListener((_observable, oldValue, newValue) -> {
@@ -144,7 +146,6 @@ public class TransactionDialogController implements Initializable {
 
     @FXML
     private void applyButtonHandler(ActionEvent actionEvent){
-
         if(selectedCategory == null) {//
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Incomplete Form");
@@ -162,6 +163,7 @@ public class TransactionDialogController implements Initializable {
                     calendar.getTimeInMillis(),
                     noteArea.getText());
             if(MODE == CREATE_MODE){
+                System.out.println("CREATE MODE");
                 databaseManager.insertTransaction(transaction);
                 //TODO re-enable this
                 //HTTPMessenger.sendNewTransaction(transaction);
@@ -170,10 +172,13 @@ public class TransactionDialogController implements Initializable {
             }else{
                 Transaction old = databaseManager.getTransaction(transactionID);
                 if (!old.equals(transaction)){
+                    System.out.println("UPDATING TRANSACTION");
                     databaseManager.updateTransaction(transaction);
                     HTTPMessenger.updateTransaction(transaction);
                     observable.changed =true;
                     observable.notifyObservers();
+                }else{
+                    System.out.println("NOT UPDATING TRANSACTION");
                 }
             }
 
