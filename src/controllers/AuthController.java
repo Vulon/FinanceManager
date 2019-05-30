@@ -1,7 +1,9 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import utills.DatabaseManager;
 import utills.HTTPMessenger;
@@ -46,6 +48,14 @@ public class AuthController {
         switch (response) {
             case 200: {
                 sceneManager.activateScreen("main");
+                HTTPMessenger.loadData();
+                DatabaseManager databaseManager = DatabaseManager.getInstance();
+                databaseManager.updateUserData(login, password, HTTPMessenger.token, HTTPMessenger.refreshToken);
+                try {
+                    sceneManager.addScreen("main", (GridPane) FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 return;
             }
             case 404: {
@@ -66,9 +76,13 @@ public class AuthController {
     }
     @FXML
     private void testHandler(){
-        System.out.println("USING SELECT");
-
-
+        DatabaseManager databaseManager = DatabaseManager.getInstance();
+        databaseManager.updateUserData("Amir", "1111", "TOKEN", "REFRESH TOKEN");
+        try {
+            sceneManager.addScreen("main", (GridPane) FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         sceneManager.activateScreen("main");
     }
     @FXML
@@ -84,6 +98,7 @@ public class AuthController {
                     errorMsg1.setVisible(true);
                     errorMsg1.setTextFill(Color.GREEN);
                     errorMsg1.setText("Registration complete");
+
                     return;
                 }
                 case 409: {

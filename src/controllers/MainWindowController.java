@@ -48,6 +48,12 @@ public class MainWindowController implements Initializable {
 
         //HTTPMessenger.loadData(transactions,categories); //TODO add actual data from server
 
+        databaseManager.insertBaseCategories();
+        categories.addAll(databaseManager.getIncomeCategories());
+        categories.addAll(databaseManager.getExpenseCategories());
+
+        databaseManager.deleteDebugTransactions();
+        databaseManager.insertTestTransactions(categories);
         int year;
         if(!yearList.contains(year = GregorianCalendar.getInstance().get(Calendar.YEAR))) {
             yearList.add(year);
@@ -81,13 +87,7 @@ public class MainWindowController implements Initializable {
         categories = FXCollections.observableArrayList();
         thisMonthTransactions = FXCollections.observableArrayList();
         databaseManager = DatabaseManager.getInstance();
-        DatabaseManager databaseManager = DatabaseManager.getInstance();
-        databaseManager.insertBaseCategories();
-        categories.addAll(databaseManager.getIncomeCategories());
-        categories.addAll(databaseManager.getExpenseCategories());
 
-        databaseManager.deleteDebugTransactions();
-        databaseManager.insertTestTransactions(categories);
     }
     @FXML
     private void addTransaction(){

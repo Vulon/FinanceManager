@@ -37,7 +37,7 @@ public class Main extends Application {
         sceneManager = SceneManager.getInstance();
         sceneManager.setUpMainSccene(mainScene);
         sceneManager.addScreen("auth", (AnchorPane)FXMLLoader.load(getClass().getResource("../fxmlLayouts/sample.fxml")));
-        sceneManager.addScreen("main", (GridPane)FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
+
         primaryStage.setScene(mainScene);
 
         authController = loader.getController();

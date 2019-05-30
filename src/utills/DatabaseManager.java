@@ -15,6 +15,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class DatabaseManager {
+    private static String BUDGET = "BUDGET";
+    private static String CATEGORY = "CATEGORY";
+    private static String TRANSACTION = "TRANSACTION";
+    private static String USER_DATA = "USER_DATA";
     private static DatabaseManager link = null;
     private static final String DRIVER_NAME = "org.h2.Driver";
     private static final String DATABASE_URL = "jdbc:h2:file:~/app_data";
@@ -29,34 +33,38 @@ public class DatabaseManager {
         try{
             Class.forName(DRIVER_NAME);
             connection = DriverManager.getConnection(DATABASE_URL, "app", "2546");
-            createTables();
+            createUserTable();
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-    private void createTables(){
+    private void createUserTable(){
+        try{
+            Statement userStatement = connection.createStatement();
+            String sql = "CREATE TABLE IF NOT EXISTS " + USER_DATA + "(EMAIL VARCHAR(30) PRIMARY KEY, PASSWORD VARCHAR(30)" +
+                    ", TOKEN VARCHAR(50), REFRESH VARCHAR(50))";
+            userStatement.executeUpdate(sql);
+            userStatement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    private void createTables(String userEmail){ //MUST CALL BEFORE USE DATABASE
         try{
             Statement catStatement = connection.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS CATEGORY(ID INT PRIMARY KEY," +
+            String sql = "CREATE TABLE IF NOT EXISTS " + CATEGORY + "(ID INT PRIMARY KEY," +
                     " NAME VARCHAR(20), COLOR VARCHAR(7), ICONID SMALLINT, IS_INCOME BIT)";
             catStatement.executeUpdate(sql);
             Statement trStatement = connection.createStatement();
-            sql = "CREATE TABLE IF NOT EXISTS TRANSACTION (ID INT PRIMARY KEY, AMOUNT DOUBLE, TIMESTAMP LONG, " +
+            sql = "CREATE TABLE IF NOT EXISTS " + TRANSACTION + " (ID INT PRIMARY KEY, AMOUNT DOUBLE, TIMESTAMP LONG, " +
                     "CATEGORY_ID INT, NOTE VARCHAR(40))";
             trStatement.executeUpdate(sql);
             Statement budStatement = connection.createStatement();
-            sql = "CREATE TABLE IF NOT EXISTS BUDGET (MONTH SMALLINT PRIMARY KEY, YEAR SMALLINT PRIMARY KEY , LIMIT DOUBLE)";
+            sql = "CREATE TABLE IF NOT EXISTS "+ BUDGET + " (MONTH_NUM SMALLINT, YEAR_NUM SMALLINT, AMOUNT DOUBLE, PRIMARY KEY(MONTH_NUM, YEAR_NUM))";
             budStatement.executeUpdate(sql);
-            Statement userStatement = connection.createStatement();
-            sql = "CREATE TABLE IF NOT EXISTS USER_DATA (EMAIL VARCHAR(30) PRIMARY KEY, PASSWORD VARCHAR(30)" +
-                    ", TOKEN VARCHAR(50), REFRESH VARCHAR(50))";
-            userStatement.executeUpdate(sql);
             catStatement.close();
             trStatement.close();
             budStatement.close();
-            userStatement.close();
-
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -74,14 +82,14 @@ public class DatabaseManager {
             XMLParser parser = new XMLParser();
             ArrayList<Category> categories = parser.getNesIncomes();
             for (int i = 0; i < categories.size(); i++){
-                String sql = "SELECT * FROM CATEGORY WHERE id =" + Integer.toString(categories.get(i).getID()) + ";";
+                String sql = "SELECT * FROM " + CATEGORY + " WHERE id =" + Integer.toString(categories.get(i).getID()) + ";";
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);
                 if (!resultSet.next()){
                     statement.close();
                     Statement insertStatement = connection.createStatement();
                     Category category = categories.get(i);
-                    sql = "INSERT INTO CATEGORY VALUES (" + category.getID() +", '" + category.getName() + "', '"
+                    sql = "INSERT INTO " + CATEGORY + " VALUES (" + category.getID() +", '" + category.getName() + "', '"
                     + category.getColor() + "', " + category.getIconId() + ", " + "1)";
                     System.out.println(sql);
                     insertStatement.executeUpdate(sql);
@@ -90,14 +98,14 @@ public class DatabaseManager {
             }
             categories = parser.getNesExpenses();
             for (int i = 0; i < categories.size(); i++){
-                String sql = "SELECT * FROM CATEGORY WHERE id =" + Integer.toString(categories.get(i).getID()) + ";";
+                String sql = "SELECT * FROM " + CATEGORY+ "  WHERE id =" + Integer.toString(categories.get(i).getID()) + ";";
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);
                 if (!resultSet.next()){
                     statement.close();
                     Statement insertStatement = connection.createStatement();
                     Category category = categories.get(i);
-                    sql = "INSERT INTO CATEGORY VALUES (" + category.getID() +", '" + category.getName() + "', '"
+                    sql = "INSERT INTO " +  CATEGORY + " VALUES (" + category.getID() +", '" + category.getName() + "', '"
                             + category.getColor() + "', " + category.getIconId() + ", " + "0)";
                     System.out.println(sql);
                     insertStatement.executeUpdate(sql);
@@ -112,7 +120,7 @@ public class DatabaseManager {
         ArrayList<Category> categories = new ArrayList<>();
         try{
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM CATEGORY WHERE IS_INCOME = 1";
+            String sql = "SELECT * FROM " + CATEGORY + " WHERE IS_INCOME = 1";
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
@@ -133,7 +141,7 @@ public class DatabaseManager {
         ArrayList<Category> categories = new ArrayList<>();
         try{
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM CATEGORY WHERE IS_INCOME = 0";
+            String sql = "SELECT * FROM " + CATEGORY + " WHERE IS_INCOME = 0";
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()){
                 int id = resultSet.getInt("id");
@@ -160,7 +168,7 @@ public class DatabaseManager {
     public void deleteDebugTransactions(){
         try{
             Statement statement = connection.createStatement();
-            String sql = "DELETE FROM TRANSACTION WHERE NOTE = 'DEBUG'";
+            String sql = "DELETE FROM " + TRANSACTION + "WHERE NOTE = 'DEBUG'";
             statement.executeUpdate(sql);
             statement.close();
         }catch (Exception e){
@@ -179,7 +187,7 @@ public class DatabaseManager {
             long timestart = calendar.getTimeInMillis() / 1000;
             calendar.add(Calendar.MONTH, 1);
             long timeend = calendar.getTimeInMillis() / 1000;
-            String sql = "SELECT * FROM TRANSACTION WHERE TIMESTAMP >= " + timestart + " AND TIMESTAMP <= " + timeend;
+            String sql = "SELECT * FROM " + TRANSACTION + " WHERE TIMESTAMP >= " + timestart + " AND TIMESTAMP <= " + timeend;
             ResultSet resultSet = selectStatement.executeQuery(sql);
             while (resultSet.next()){
                 //amount, category, timestamp, note
@@ -206,7 +214,7 @@ public class DatabaseManager {
     public Category getCategoryById(int id){
         try {
             Statement selectStatement = connection.createStatement();
-            String sql = "SELECT * FROM CATEGORY WHERE  ID = "+ id;
+            String sql = "SELECT * FROM " + CATEGORY + " WHERE  ID = "+ id;
             ResultSet resultSet = selectStatement.executeQuery(sql);
             if(resultSet.next()){
                 String name = resultSet.getString("name");
@@ -226,7 +234,7 @@ public class DatabaseManager {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try {
             Statement selectStatement = connection.createStatement();
-            String sql = "SELECT * FROM TRANSACTION";
+            String sql = "SELECT * FROM " + TRANSACTION;
             ResultSet resultSet = selectStatement.executeQuery(sql);
             while (resultSet.next()){
                 //amount, category, timestamp, note
@@ -254,7 +262,7 @@ public class DatabaseManager {
     public void insertTransaction(Transaction transaction){
         try {
             Statement insertStatement = connection.createStatement();
-            String sql = "INSERT INTO TRANSACTION VALUES(" + transaction.getId()
+            String sql = "INSERT INTO " + TRANSACTION + " VALUES(" + transaction.getId()
                     + ", " + transaction.getAmount() + ", " + transaction.getDate() / 1000
                     + ", " + transaction.getCategory().getID() + ", '" + transaction.getNote() +"')";
             System.out.println(sql);
@@ -268,7 +276,7 @@ public class DatabaseManager {
     public int generateUniqueTransactionID(){
         try {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            String sql = "SELECT ID FROM TRANSACTION";
+            String sql = "SELECT ID FROM " + TRANSACTION;
             boolean flag = true;
             int unique = 0;
             ResultSet resultSet = statement.executeQuery(sql);
@@ -297,7 +305,7 @@ public class DatabaseManager {
         ArrayList<Month> months = new ArrayList<>();
         try{
             Statement statement = connection.createStatement();
-            String sql = "SELECT TIMESTAMP FROM TRANSACTION";
+            String sql = "SELECT TIMESTAMP FROM " + TRANSACTION;
             ResultSet resultSet = statement.executeQuery(sql);
             Calendar calendar = GregorianCalendar.getInstance();
             while(resultSet.next()){
@@ -318,7 +326,7 @@ public class DatabaseManager {
     public Transaction getTransaction(int id){
         try {
             Statement statement = connection.createStatement();
-            String sql = "SELECT * FROM TRANSACTION WHERE ID = " + id;
+            String sql = "SELECT * FROM " + TRANSACTION + " WHERE ID = " + id;
             ResultSet resultSet = statement.executeQuery(sql);
             if(resultSet.next()){
                 double amount = resultSet.getDouble("amount");
@@ -339,7 +347,7 @@ public class DatabaseManager {
     public void updateTransaction(Transaction transaction){
         try{
             Statement statement = connection.createStatement();
-            String sql = "UPDATE TRANSACTION SET AMOUNT = " + transaction.getAmount()
+            String sql = "UPDATE " + TRANSACTION + " SET AMOUNT = " + transaction.getAmount()
                     +", TIMESTAMP = "+ transaction.getDate() /1000 + ", CATEGORY_ID = " + transaction.getCategory().getID()
                     + ", NOTE = '" + transaction.getNote() + "' WHERE ID = " + transaction.getId();
             statement.executeUpdate(sql);
@@ -352,8 +360,36 @@ public class DatabaseManager {
     public void deleteByID(int id){
         try{
             Statement statement = connection.createStatement();
-            String sql = "DELETE FROM TRANSACTION WHERE ID = "+ id;
+            String sql = "DELETE FROM " + TRANSACTION + " WHERE ID = "+ id;
             statement.executeUpdate(sql);
+            statement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void updateUserData(String email, String password, String token, String refreshtoken){
+        try{
+            CATEGORY = "CATEGORY_" + email;
+            TRANSACTION = "TRANSACTION_" + email;
+            BUDGET = "BUDGET_" + email;
+            createTables(email);
+            Statement statement = connection.createStatement();
+            String sql = "SELECT * FROM " +USER_DATA + " WHERE EMAIL = '"  + email + "'";
+            ResultSet resultSet = statement.executeQuery(sql);
+            if(resultSet.next()){
+                sql = "UPDATE "  + USER_DATA + " SET PASSWORD = '" + password + "', TOKEN = '" + token +"', REFRESH = '"
+                + refreshtoken + "' WHERE EMAIL = '" + email + "'";
+                Statement upStatement = connection.createStatement();
+                upStatement.executeUpdate(sql);
+                upStatement.close();
+            }else{
+                sql = "INSERT INTO " + USER_DATA + " VALUES('" + email + "', '" + password + "', '" + token
+                + "', '" + refreshtoken + "')";
+                Statement insStatement = connection.createStatement();
+                insStatement.executeUpdate(sql);
+                insStatement.close();
+            }
+
             statement.close();
         }catch (Exception e){
             e.printStackTrace();

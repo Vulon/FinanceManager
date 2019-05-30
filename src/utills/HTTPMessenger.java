@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class HTTPMessenger {
     private static final String urlMainPath ="http://localhost:8080";
-
+    public static String token;
+    public static String refreshToken;
     public static int authLogin(String login, String password) {
         StringBuilder urlString = new StringBuilder(urlMainPath);
         urlString.append("/signin")
@@ -48,7 +49,7 @@ public class HTTPMessenger {
             return 500;
         }
     }
-    public static int loadData(ArrayList<Transaction> transactions, ObservableList<Category> categories){
+    public static int loadData(){
         StringBuilder urlString= new StringBuilder(urlMainPath);
         try{
             URL url = new URL(urlString.toString());
