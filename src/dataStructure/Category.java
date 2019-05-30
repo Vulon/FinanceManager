@@ -10,22 +10,16 @@ public class Category {
     private String color; //#ffffff
     private int iconId;
     private int ID;
-    private ArrayList<Integer> heirs;
     private boolean isIncome;
 
-    public Category(int ID, String name, String color, int iconId, boolean isIncome, Integer ... indexes) {
+    public Category(int ID, String name, String color, int iconId, boolean isIncome) {
         this.name = name;
         this.color = color;
         this.iconId = iconId;
         this.ID = ID;
         this.isIncome = isIncome;
-        heirs = new ArrayList<Integer>();
-        for(Integer category : indexes){
-            heirs.add(category);
-        }
 
     }
-    public ArrayList<Integer> getHeirs(){ return heirs;}
 
     public String getName() {
         return name;

@@ -1,8 +1,8 @@
 package controllers;
 
 import com.jfoenix.controls.JFXTimePicker;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import dataStructure.Category;
+import dataStructure.ObservableData;
 import dataStructure.Transaction;
 import dataStructure.categoryCell;
 import javafx.collections.FXCollections;
@@ -15,33 +15,36 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import utills.DatabaseManager;
 import utills.HTTPMessenger;
-import utills.XMLParser;
 
-import java.io.File;
+import java.net.Inet4Address;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 
 public class TransactionDialogController implements Initializable {
+    public static final int CREATE_MODE = 0;
+    public static final int MODIFY_MODE = 1;
+    private int MODE;
+    private int transactionID;
     @FXML private TextField amountField;
-//    @FXML private TextField timeField;    Depreciated, use
-                                            /**{@link TransactionDialogController#timePicker}*/
     @FXML private TextArea noteArea;
     @FXML private Button applyButton;
 
-    @FXML private Button cancelButton;
+    @FXML private Button deleteButton;
     @FXML private ListView<Category> spendCategoryList;
     @FXML private ListView<Category> incomeCategoryList;
+    DatabaseManager databaseManager;
     @FXML private DatePicker datePicker;
     @FXML private JFXTimePicker timePicker;
-
+    private ObservableData observable;
     private Category selectedCategory;
 
     @FXML public void handleSpendSelection(MouseEvent arg0) {
@@ -50,31 +53,24 @@ public class TransactionDialogController implements Initializable {
     @FXML public void handleIncomeSelection(MouseEvent arg0) {
         selectedCategory = incomeCategoryList.getSelectionModel().getSelectedItem();
     }
-    private ObservableList<Transaction> transactionObservableList;
     private ArrayList<Category> spendCategories;
     private ArrayList<Category> incomeCategories;
-//    private boolean isTimeCorrect;
-    public void setReturnReference(ObservableList<Transaction> transactionObservableList, ObservableList<Category> categories){
-        this.transactionObservableList = transactionObservableList;
-        try{
-            XMLParser parser = new XMLParser(new File(Paths.get("src", "config", "cat.xml").toUri()));
-            spendCategories = parser.getNesExpenses();
-            incomeCategories = parser.getNesIncomes();
-        }catch (Exception e){
-            e.printStackTrace();
-            spendCategories = new ArrayList<>();
-            incomeCategories = new ArrayList<>();
+
+
+    public void setReturnReference(ObservableData observable, int mode, int transactionID){
+        this.observable = observable;
+        this.MODE = mode;
+        this.transactionID = transactionID;
+        databaseManager = DatabaseManager.getInstance();
+        spendCategories = databaseManager.getExpenseCategories();
+        incomeCategories = databaseManager.getIncomeCategories();
+        if (mode == CREATE_MODE){
+            deleteButton.setVisible(false);
         }
-
-
         spendCategoryList.setItems(FXCollections.observableList(spendCategories));
         spendCategoryList.setCellFactory(categoryList -> new categoryCell());
         incomeCategoryList.setItems(FXCollections.observableList(incomeCategories));
         incomeCategoryList.setCellFactory(categoryList -> new categoryCell());
-
-    }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
         selectedCategory = null;
         datePicker.setConverter(new StringConverter<LocalDate>() {
             private DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -102,41 +98,43 @@ public class TransactionDialogController implements Initializable {
                 return LocalTime.parse(timeString,dateTimeFormatter);
             }
         });
-        datePicker.setValue(LocalDate.now());
-        timePicker.setValue(LocalTime.now());
+        if(MODE == CREATE_MODE){
+            datePicker.setValue(LocalDate.now());
+            timePicker.setValue(LocalTime.now());
+        }else{
+            Transaction transaction = databaseManager.getTransaction(transactionID);
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTimeInMillis(transaction.getDate());
+            datePicker.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)));
+            timePicker.setValue(LocalTime.of(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), 0));
+            selectedCategory = transaction.getCategory();
+            amountField.setText(Double.toString(transaction.getAmount()));
+            noteArea.setText(transaction.getNote());
+        }
+
         timePicker.set24HourView(true);
 
         applyButton.setDisable(true);
         datePicker.requestFocus();
 
-        amountField.textProperty().addListener((observable, oldValue, newValue) -> {
+        amountField.textProperty().addListener((_observable, oldValue, newValue) -> {
             amountFieldHandler();
         });
-//        isTimeCorrect = false;
+    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 
-//    No Longer required, as Implemented method itself
-    /** {@link TransactionDialogController#amountFieldHandler()}*/
-
-//    private boolean isNumber(String line){
-//        for(char c : line.toCharArray()){
-//            if(!Character.isDigit(c)){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+//
     @FXML
     private void amountFieldHandler(){
-        //Improved approach that will handle decimal points, as well
         try{
             Double.valueOf(amountField.getText());
-            // Is Valid
             amountField.setStyle("-fx-text-fill: green");
             applyButton.setDisable(false);
         }
         catch (Exception ex){
-            // Is Invalid
             amountField.setStyle("-fx-text-fill: red");
             applyButton.setDisable(true);
         }
@@ -147,44 +145,41 @@ public class TransactionDialogController implements Initializable {
     @FXML
     private void applyButtonHandler(ActionEvent actionEvent){
 
-                                    /** {@link TransactionDialogController#initialize} */
-//        amountFieldHandler();     No Longer Needed as I have added a Listener in the initialize this method
-
-        /* If apply button is disabled, then how would we get into this method in the first place..... -_-  */
-//        if (applyButton.isDisabled()){
-//
-//        }else
-
-        if(selectedCategory == null) {
-//            selectedCategory = spendCategories.get(0);  /*What if there are no categories?, then the app will crash? */
-
+        if(selectedCategory == null) {//
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Incomplete Form");
             alert.setHeaderText("Category not selected");
             alert.setContentText("Please select a category from the left panel to proceed.");
             alert.showAndWait();
-
         } else {
             LocalDate localDate = datePicker.getValue();
             GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
-//            System.out.println("Time is ");
-//            System.out.println(getHours());
-//            System.out.println(getMins());
             calendar.set(localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth(),
                     timePicker.getValue().getHour(),
                     timePicker.getValue().getMinute());
 
-
-            Transaction transaction = new Transaction(Double.parseDouble(amountField.getText()), selectedCategory,
+            Transaction transaction = new Transaction(transactionID, Double.parseDouble(amountField.getText()), selectedCategory,
                     calendar.getTimeInMillis(),
                     noteArea.getText());
-            transaction.setCalendar(calendar);
-            transactionObservableList.add(transaction);
+            if(MODE == CREATE_MODE){
+                databaseManager.insertTransaction(transaction);
+                //TODO re-enable this
+                //HTTPMessenger.sendNewTransaction(transaction);
+                observable.changed =true;
+                observable.notifyObservers();
+            }else{
+                Transaction old = databaseManager.getTransaction(transactionID);
+                if (!old.equals(transaction)){
+                    databaseManager.updateTransaction(transaction);
+                    HTTPMessenger.updateTransaction(transaction);
+                    observable.changed =true;
+                    observable.notifyObservers();
+                }
+            }
 
-            //TODO re-enable this
-            //HTTPMessenger.sendNewTransaction(transaction);
 
-            cancelButtonHandler(actionEvent);
+
+
 
             Node source = (Node)  actionEvent.getSource();
             Stage stage  = (Stage) source.getScene().getWindow();
@@ -193,7 +188,13 @@ public class TransactionDialogController implements Initializable {
     }
 
     @FXML
-    private void cancelButtonHandler(ActionEvent actionEvent){
+    private void deleteButtonHandler(ActionEvent actionEvent){
+        if(MODE == MODIFY_MODE){
+            databaseManager.deleteByID(transactionID);
+            HTTPMessenger.deleteTransaction(transactionID);
+            observable.changed =true;
+            observable.notifyObservers();
+        }
         Node source = (Node)  actionEvent.getSource();
         Stage stage  = (Stage) source.getScene().getWindow();
         stage.close();

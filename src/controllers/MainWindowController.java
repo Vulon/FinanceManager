@@ -1,12 +1,10 @@
 package controllers;
 
 import Debug.MyRandomGenerator;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import dataStructure.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,13 +16,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import utills.HTTPMessenger;
-import utills.XMLParser;
+import utills.DatabaseManager;
 
-import java.io.File;
 import java.net.URL;
-import java.nio.file.Paths;
-import java.time.Year;
 import java.util.*;
 
 public class MainWindowController implements Initializable {
@@ -38,15 +32,16 @@ public class MainWindowController implements Initializable {
     @FXML private Button budgetButton;
     @FXML private Label budgetLabel;
     @FXML private TextField budgetSettings;
+    private DataChangeObserver observer;
 
     private BarChart barChart;
-    private ObservableList<Transaction> transactionObservableList;
     private ObservableList<Transaction> thisMonthTransactions;
 
     private ObservableList<Category> categories;
     private ObservableList<Month> monthsList;
     private ObservableList<Integer> yearList;
     private Budget budget;
+    DatabaseManager databaseManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,55 +62,34 @@ public class MainWindowController implements Initializable {
         yearPicker.setValue(yearList.get(yearList.size() - 1));
         updateTransactionList();
 
-
         budget = Budget.getInstance();
-
-
 
         listView.setItems(thisMonthTransactions);
         listView.setCellFactory(listView -> new TransActionCell());
         categoryList.setItems(categories);
         categoryList.setCellFactory(categoryList -> new categoryCell());
         listView.setFixedCellSize(110);
+
         initializePieChart();
         initializeMonthPicker();
         initializeYearPicker();
         initializeBarChart();
-        transactionObservableList.addListener(new ListChangeListener<Transaction>() {
-            @Override
-            public void onChanged(Change<? extends Transaction> c) {
-                System.out.println("TRIGGERED");
-                initializePieChart();
-
-                updateYearPicker(); /* Calls the following methods as well:
-                                       updateMonthPicker
-                                       updateTransactionList
-                                       updateBarChart();
-                                        */
-            }
-        });
-
+        updateBudget();
     }
 
     public MainWindowController() {
-        transactionObservableList = FXCollections.observableArrayList();
         monthsList = FXCollections.observableArrayList();
         yearList = FXCollections.observableArrayList();
         categories = FXCollections.observableArrayList();
         thisMonthTransactions = FXCollections.observableArrayList();
+        databaseManager = DatabaseManager.getInstance();
+        DatabaseManager databaseManager = DatabaseManager.getInstance();
+        databaseManager.insertBaseCategories();
+        categories.addAll(databaseManager.getIncomeCategories());
+        categories.addAll(databaseManager.getExpenseCategories());
 
-        //MyRandomGenerator.fillBaseCategories(categories);//TODO change category generation
-        try{
-            XMLParser parser = new XMLParser(new File(Paths.get("src", "config", "cat.xml").toUri()));
-            categories.addAll(parser.getNesIncomes());
-            categories.addAll(parser.getNesExpenses());
-        }catch (Exception e){
-            MyRandomGenerator.fillBaseCategories(categories);
-            e.printStackTrace();
-        }
-        for(int i = 0; i < 10; i++){
-            transactionObservableList.add(MyRandomGenerator.generateTransaction(categories));
-        }
+        databaseManager.deleteDebugTransactions();
+        databaseManager.insertTestTransactions(categories);
     }
     @FXML
     private void addTransaction(){
@@ -128,7 +102,10 @@ public class MainWindowController implements Initializable {
             newTransactionDialog.setScene(mainScene);
 
             TransactionDialogController newTransactionController = ntLoader.<TransactionDialogController>getController();
-            newTransactionController.setReturnReference(transactionObservableList, categories);
+            ObservableData observable = new ObservableData();
+            observer = new DataChangeObserver();
+            observable.addObserver(observer);
+            newTransactionController.setReturnReference(observable, TransactionDialogController.CREATE_MODE, databaseManager.generateUniqueTransactionID());
 
             newTransactionDialog.show();
 
@@ -142,7 +119,11 @@ public class MainWindowController implements Initializable {
         for(int  i : chartData){
             i = 0;
         }
-
+        for(Transaction tr : thisMonthTransactions){
+            if(!tr.getCategory().checkIsIncome()){
+                chartData[tr.getCategory().getID()]+= tr.getAmount();
+            }
+        }
         for(Category category : categories){
             if(chartData[category.getID()] > 0){
                 PieChart.Data slice = new PieChart.Data(category.getName(), chartData[category.getID()]);
@@ -150,21 +131,16 @@ public class MainWindowController implements Initializable {
                 slice.getNode().setStyle("-fx-pie-color: " + category.getColor());
             }
         }
-        updateBudget();
-
     }
 
-
-    /* The bellow two methods, are utility methods for the newly added*//**{@link MainWindowController#yearPicker*//*
-        they provide similar functionality as the methods implemented for the monthPicker*/
     private void initializeYearPicker(){
         updateYearPicker();
-
         yearPicker.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.equals(-1)) {
                 yearPicker.setValue(yearPicker.getItems().get(newValue.intValue()));
                 updateMonthPicker();
-                updateBarChart();
+
+                initializePieChart();
             }
         });
     }
@@ -174,8 +150,8 @@ public class MainWindowController implements Initializable {
         /* Clear the list and repopulate the list from the beginning,
         in a case a transaction was deleted and as such there may be no other transaction with such year */
         yearList.clear();
-
-        for(Transaction tr : transactionObservableList){
+        ArrayList<Transaction> transactions = databaseManager.getAllTransactions();
+        for(Transaction tr : transactions){
             if(!yearList.contains(tr.getCalendar().get(Calendar.YEAR))){
                 yearList.add(tr.getCalendar().get(Calendar.YEAR));
             }
@@ -200,8 +176,6 @@ public class MainWindowController implements Initializable {
 
     private void initializeMonthPicker(){
         updateMonthPicker();
-
-//        monthPicker.setItems(monthsList);     /* Moved to updateMonthPicker*/
         monthPicker.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -217,19 +191,10 @@ public class MainWindowController implements Initializable {
         Month prvVal = (Month)monthPicker.getValue();
 
         monthsList.clear();
-        for(Transaction tr : transactionObservableList){
-//            if(monthsList.contains(Month.values()[tr.getCalendar().get(Calendar.MONTH)])){
-//            }else{
-//                monthsList.add(Month.values()[tr.getCalendar().get(Calendar.MONTH)]);
-//            }
-
-            if ((!monthsList.contains(Month.values()[tr.getCalendar().get(Calendar.MONTH)]))
-                    && (tr.getCalendar().get(Calendar.YEAR) == (int)yearPicker.getValue()))
-            {
-                monthsList.add(Month.values()[tr.getCalendar().get(Calendar.MONTH)]);
-            }
+        ArrayList<Month> monthArrayList = databaseManager.getThisYearsActiveMonths((int)yearPicker.getValue());
+        for(Month month : monthArrayList){
+            monthsList.add(month);
         }
-
         /* TODO: Implement a sort method for the "Month" enum type or simply replace with a int type List*/
 
         monthPicker.setItems(monthsList);
@@ -247,13 +212,9 @@ public class MainWindowController implements Initializable {
         Month selectedM = (Month)monthPicker.getValue();
         int selectedY = (int)yearPicker.getValue();
         System.out.println("selected value : " + selectedY + " " + selectedM + "(" + selectedM.ordinal() + ")");
-//        System.out.println("Selected " + selectedM);
+
         thisMonthTransactions.clear();
-        for(Transaction tr : transactionObservableList){
-            if(tr.getCalendar().get(Calendar.MONTH) == selectedM.ordinal() && (tr.getCalendar().get(Calendar.YEAR) == selectedY)){
-                thisMonthTransactions.add(tr);
-            }
-        }
+        thisMonthTransactions.addAll(databaseManager.getThisMonthTransactions(selectedY, selectedM.ordinal()));
 
     }
     private void updateBarChart(){
@@ -265,7 +226,8 @@ public class MainWindowController implements Initializable {
         for(int i = 0; i < monthPicker.getItems().size(); i++){
             int totalExpenses = 0;
             int totalIncomes = 0;
-            for(Transaction tr : transactionObservableList){
+            ArrayList<Transaction> transactions = databaseManager.getAllTransactions();
+            for(Transaction tr : transactions){
                 if((tr.getCalendar().get(Calendar.MONTH) == ((Month)monthPicker.getItems().get(i)).ordinal())
                                             && (tr.getCalendar().get(Calendar.YEAR) == (int)yearPicker.getValue())){    /* added so that the bar chart reflects the correct year */
                     if(tr.getCategory().checkIsIncome()){
@@ -302,6 +264,8 @@ public class MainWindowController implements Initializable {
                 totalSpent += tr.getAmount();
             }
         }
+        System.out.println(monthPicker.getSelectionModel().isEmpty());
+        System.out.println(((Month)monthPicker.getSelectionModel().getSelectedItem()).toString());
         Integer monthKey = ((Month)monthPicker.getSelectionModel().getSelectedItem()).ordinal();
         Integer yearKey = (Integer)yearPicker.getSelectionModel().getSelectedItem();
         System.out.println("Budget check: " + monthKey.toString());
@@ -315,14 +279,14 @@ public class MainWindowController implements Initializable {
         }else{
             budgetLabel.setStyle("-fx-text-fill: green");
         }
-        budgetLabel.setText("Spent this month: " + Integer.toString(totalSpent) + "/ limit: " + Integer.toString(budget.currentLimit));
+        budgetLabel.setText("Spent this month: " + Integer.toString(totalSpent) + "/ limit: " + Double.toString(budget.currentLimit));
     }
     @FXML private void budgetButtonHandler(){
         Integer monthKey = ((Month)monthPicker.getSelectionModel().getSelectedItem()).ordinal();
         Integer yearKey = (Integer)yearPicker.getSelectionModel().getSelectedItem();
 
         try{
-            int limit = Integer.valueOf(budgetSettings.getText());
+            double limit = Double.valueOf(budgetSettings.getText());
             if(budget.history.containsKey(new Pair(monthKey, yearKey))){
                 budget.history.replace(new Pair<>(monthKey, yearKey), limit);
             }else{
@@ -332,6 +296,17 @@ public class MainWindowController implements Initializable {
         }catch (Exception e){
 
         }
+    }
+    private class DataChangeObserver implements Observer{
+        @Override
+        public void update(Observable o, Object arg) {
+            System.out.println("OBSERVER GOT UPDATE");
+            updateBarChart();
+            initializePieChart();
+            updateYearPicker();
+            updateMonthPicker();
+            updateBudget();
 
+        }
     }
 }

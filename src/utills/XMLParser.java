@@ -9,11 +9,13 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class XMLParser{
     private Document doc;
-    public XMLParser(File file)throws Exception{
+    public XMLParser()throws Exception{
+        File file = new File(Paths.get("src", "config", "cat.xml").toUri());
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         doc = builder.parse(file);
         doc.getDocumentElement().normalize();
@@ -31,9 +33,10 @@ public class XMLParser{
                 String values[] = line.split("\n");//0 - number, 1 - color
                 values[1] = values[1].trim();
                 String image = values[0];
+                int iconId = Integer.parseInt(image);
                 int id = Integer.parseInt(values[0]);
 
-                Category category = new Category(id, name, values[1], id, true);
+                Category category = new Category(id, name, values[1], iconId, true);
                 arrayList.add(category);
             }
         }

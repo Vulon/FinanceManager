@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Budget implements Serializable {
+    public double currentLimit;
+    public HashMap<Pair<Integer, Integer>, Double> history; //Month-year key -> limit for that month
+    public int defaultValue;
+
     private static Budget link;
     public static Budget getInstance(){
         if(link == null){
@@ -13,9 +17,7 @@ public class Budget implements Serializable {
         }
         return link;
     }
-    public int currentLimit;
-    public HashMap<Pair<Integer, Integer>, Integer> history;
-    public int defaultValue;
+
     private Budget(){
         history = new HashMap<>();
         defaultValue = 20000;

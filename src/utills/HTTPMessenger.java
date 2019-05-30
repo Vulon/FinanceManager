@@ -74,4 +74,10 @@ public class HTTPMessenger {
             return 500;
         }
     }
+    public static void updateTransaction(Transaction transaction){
+        //TODO IMPLEMENT TRANSACTION UPDATE
+    }
+    public static void deleteTransaction(int id){
+        //TODO IMPLEMENT TRANSACTION DELETE
+    }
 }

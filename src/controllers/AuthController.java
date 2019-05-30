@@ -3,8 +3,13 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import utills.DatabaseManager;
 import utills.HTTPMessenger;
 import utills.SceneManager;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class AuthController {
     @FXML
@@ -61,6 +66,9 @@ public class AuthController {
     }
     @FXML
     private void testHandler(){
+        System.out.println("USING SELECT");
+
+
         sceneManager.activateScreen("main");
     }
     @FXML

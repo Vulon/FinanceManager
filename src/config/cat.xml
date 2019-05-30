@@ -62,6 +62,7 @@
 <nes_expense id = "Taxes">
 			<number>15</number>
 			<color>#c1c1f0</color>
+
 		</nes_expense>
 <nes_expense id = "Public transport">
 			<number>16</number>

@@ -15,8 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<HBox minHeight="392.0" minWidth="589.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TransactionDialogController">
+<HBox minHeight="392.0" minWidth="589.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TransactionDialogController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="212.0" spacing="5.0" HBox.hgrow="SOMETIMES">
          <children>
@@ -93,7 +92,7 @@
             </GridPane>
             <AnchorPane prefHeight="19.0" prefWidth="586.0" VBox.vgrow="NEVER">
                <children>
-                  <Button fx:id="cancelButton" layoutX="504.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancelButtonHandler" prefHeight="25.0" prefWidth="74.0" text="Cancel" AnchorPane.rightAnchor="8.0" />
+                  <Button fx:id="deleteButton" layoutX="504.0" layoutY="6.0" mnemonicParsing="false" onAction="#deleteButtonHandler" prefHeight="25.0" prefWidth="74.0" text="Delete" AnchorPane.rightAnchor="8.0" />
                   <Button fx:id="applyButton" layoutX="420.0" layoutY="6.0" mnemonicParsing="false" onAction="#applyButtonHandler" prefHeight="26.0" prefWidth="74.0" text="Apply" AnchorPane.rightAnchor="92.0" />
                </children>
                <VBox.margin>
