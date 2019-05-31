@@ -174,7 +174,8 @@ public class TransactionDialogController implements Initializable {
                 if (!old.equals(transaction)){
                     System.out.println("UPDATING TRANSACTION");
                     databaseManager.updateTransaction(transaction);
-                    HTTPMessenger.updateTransaction(transaction);
+                    HTTPMessenger httpMessenger = HTTPMessenger.getInstance();
+                    httpMessenger.updateTransaction(transaction);
                     observable.changed =true;
                     observable.notifyObservers();
                 }else{
@@ -196,7 +197,8 @@ public class TransactionDialogController implements Initializable {
     private void deleteButtonHandler(ActionEvent actionEvent){
         if(MODE == MODIFY_MODE){
             databaseManager.deleteByID(transactionID);
-            HTTPMessenger.deleteTransaction(transactionID);
+            HTTPMessenger httpMessenger = HTTPMessenger.getInstance();
+            httpMessenger.deleteTransaction(transactionID);
             observable.changed =true;
             observable.notifyObservers();
         }

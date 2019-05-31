@@ -1,5 +1,6 @@
 package controllers;
 
+import dataStructure.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -38,19 +39,20 @@ public class AuthController {
     public static void setUpSceneManager(SceneManager manager){
         sceneManager = manager;
     }
-
+    HTTPMessenger httpMessenger;
     @FXML
     private void signINHandler() {
+        httpMessenger = HTTPMessenger.getInstance();
         signINButton.setDisable(true);
         String login = loginINfield.getText();
         String password = passINField.getText();
-        int response = HTTPMessenger.authLogin(login, password);
+        int response = httpMessenger.authLogin(login, password);
         switch (response) {
             case 200: {
                 sceneManager.activateScreen("main");
-                HTTPMessenger.loadData();
+                httpMessenger.loadData();
                 DatabaseManager databaseManager = DatabaseManager.getInstance();
-                databaseManager.updateUserData(login, password, HTTPMessenger.token, HTTPMessenger.refreshToken);
+                databaseManager.updateUserData(httpMessenger.user);
                 try {
                     sceneManager.addScreen("main", (GridPane) FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
                 }catch (Exception e){
@@ -77,7 +79,7 @@ public class AuthController {
     @FXML
     private void testHandler(){
         DatabaseManager databaseManager = DatabaseManager.getInstance();
-        databaseManager.updateUserData("Amir", "1111", "TOKEN", "REFRESH TOKEN");
+        databaseManager.updateUserData(new User("Amir", "1111", "TOKEN", "REFRESH TOKEN"));
         try {
             sceneManager.addScreen("main", (GridPane) FXMLLoader.load(getClass().getResource("../fxmlLayouts/mainWindow.fxml")));
         }catch (Exception e){
@@ -87,12 +89,13 @@ public class AuthController {
     }
     @FXML
     private void signUPHandler() {
+        httpMessenger = HTTPMessenger.getInstance();
         String login = loginRegField.getText();
         String password1 = passRegField.getText();
         String password2 = pass2RegField.getText();
         signUPButton.setDisable(true);
         if (password1.equals(password2)) {
-            int response = HTTPMessenger.authRegister(login, password1);
+            int response = httpMessenger.authRegister(login, password1);
             switch (response) {
                 case 200: {
                     errorMsg1.setVisible(true);

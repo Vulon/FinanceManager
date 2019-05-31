@@ -4,6 +4,7 @@ import Debug.MyRandomGenerator;
 import dataStructure.Category;
 import dataStructure.Month;
 import dataStructure.Transaction;
+import dataStructure.User;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
@@ -22,6 +23,8 @@ public class DatabaseManager {
     private static DatabaseManager link = null;
     private static final String DRIVER_NAME = "org.h2.Driver";
     private static final String DATABASE_URL = "jdbc:h2:file:~/app_data";
+
+
     public static DatabaseManager getInstance(){
         if(link == null){
             link = new DatabaseManager();
@@ -168,11 +171,11 @@ public class DatabaseManager {
     public void deleteDebugTransactions(){
         try{
             Statement statement = connection.createStatement();
-            String sql = "DELETE FROM " + TRANSACTION + "WHERE NOTE = 'DEBUG'";
+            String sql = "DELETE FROM " + TRANSACTION + " WHERE NOTE LIKE 'DEBUG'";
             statement.executeUpdate(sql);
             statement.close();
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
     public ArrayList<Transaction> getThisMonthTransactions(int year, int month){
@@ -367,12 +370,16 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    public void updateUserData(String email, String password, String token, String refreshtoken){
+    public void updateUserData(User user){
         try{
-            CATEGORY = "CATEGORY_" + email;
-            TRANSACTION = "TRANSACTION_" + email;
-            BUDGET = "BUDGET_" + email;
-            createTables(email);
+            CATEGORY = "CATEGORY_" + user.getEmail();
+            TRANSACTION = "TRANSACTION_" + user.getEmail();
+            BUDGET = "BUDGET_" + user.getEmail();
+            String email = user.getEmail();
+            String password = user.getPassword();
+            String token = user.getToken();
+            String refreshtoken = user.getRefreshToken();
+            createTables(user.getEmail());
             Statement statement = connection.createStatement();
             String sql = "SELECT * FROM " +USER_DATA + " WHERE EMAIL = '"  + email + "'";
             ResultSet resultSet = statement.executeQuery(sql);
